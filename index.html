@@ -59,6 +59,14 @@ input,select{width:100%;background:#0e1511;border:1px solid #354238;border-radiu
 </main><footer>MATCHDAY FOOTBALL SCORER · MATCH DATA SAVED ON THIS DEVICE</footer>
 <script>
 const KEY='matchday-live-v2';
+const LIVE_API='https://matchday-live-sync.being-innovator.workers.dev';
+const pageParams=new URLSearchParams(location.search);
+const viewerMode=pageParams.get('view')==='1'&&!!pageParams.get('room');
+let roomId=pageParams.get('room')||localStorage.getItem('matchday-room')||'';
+let writerToken=localStorage.getItem('matchday-room-token')||'';
+let lastRemoteState='';
+let remotePushQueued=false;
+
 const flags=['🇮🇳','🇬🇧','🇧🇷','🇦🇷','🇫🇷','🇩🇪','🇪🇸','🇮🇹','🇵🇹','🇳🇱','🇯🇵','🇺🇸','🇲🇽','🇳🇬','🇿🇦','🇦🇺'];
 const blankStats=()=>({goals:0,shots:0,target:0,corners:0,fouls:0,yellow:0,red:0,offsides:0,saves:0});
 const fresh=()=>({teams:[{name:'HOME TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]},{name:'AWAY TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]}],stats:[blankStats(),blankStats()],seconds:0,running:false,started:false,finished:false,half:1,events:[]});
@@ -66,7 +74,7 @@ let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{state=f
 const labels={goal:'Goal',pass:'Pass',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
 const statKeys={goal:'goals',target:'target',shot:'shots',corner:'corners',foul:'fouls',yellow:'yellow',red:'red',offside:'offsides',save:'saves'};
 const actions=[['⚽ Goal','goal'],['↗ Pass','pass'],['🎯 Shot on target','target'],['↗ Shot','shot'],['🚩 Corner','corner'],['✋ Foul','foul'],['🟨 Yellow card','yellow'],['🟥 Red card','red'],['⤴ Offside','offside'],['🧤 Save','save']];
-function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function save(){if(!viewerMode)localStorage.setItem(KEY,JSON.stringify(state));if(!viewerMode&&roomId&&writerToken&&!remotePushQueued){remotePushQueued=true;setTimeout(async()=>{remotePushQueued=false;try{await fetch(LIVE_API+'/room/'+encodeURIComponent(roomId)+'?token='+encodeURIComponent(writerToken),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});lastRemoteState=JSON.stringify(state)}catch(e){console.warn('Live sync unavailable',e)}},180)}}
 function time(){return String(Math.floor(state.seconds/60)).padStart(2,'0')+':'+String(state.seconds%60).padStart(2,'0')}
 function matchMinute(){return Math.floor(state.seconds/60)+1}
 function render(){
@@ -137,6 +145,11 @@ document.querySelector('#ttsToggle').onchange=e=>{speechEnabled=e.target.checked
 document.querySelector('#crowdToggle').onchange=e=>{crowdEnabled=e.target.checked;localStorage.setItem('matchday-crowd',crowdEnabled);if(crowdEnabled)startCrowd();else stopCrowd()};
 syncAudioToggles();
 
-document.querySelector('#shareViewerBtn').onclick=()=>alert('Live viewer sharing is not ready yet. A shared real-time match service must be connected before a working spectator link can be created.');
+document.querySelector('#shareViewerBtn').onclick=async()=>{try{if(!roomId||!writerToken){const r=await fetch(LIVE_API+'/create',{method:'POST'});if(!r.ok)throw new Error('Could not create a live room');const d=await r.json();roomId=d.room;writerToken=d.token;localStorage.setItem('matchday-room',roomId);localStorage.setItem('matchday-room-token',writerToken)}await fetch(LIVE_API+'/room/'+encodeURIComponent(roomId)+'?token='+encodeURIComponent(writerToken),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});lastRemoteState=JSON.stringify(state);const link=location.origin+location.pathname+'?room='+encodeURIComponent(roomId)+'&view=1';if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(link);alert('Viewer link copied! Anyone with this link can watch the live score, stats and commentary.')}else prompt('Copy this viewer link:',link)}catch(e){alert('Could not create the viewer link. Check your connection and try again.')}};
 render();
+setupViewerMode();if(viewerMode){loadViewerState();setInterval(loadViewerState,1800)}
+
+async function loadViewerState(){if(!viewerMode)return;try{const r=await fetch(LIVE_API+'/room/'+encodeURIComponent(roomId),{cache:'no-store'});if(!r.ok)throw new Error('Room unavailable');const d=await r.json();if(d.state){state=d.state;lastRemoteState=JSON.stringify(state);render()}else{document.querySelector('#liveLabel').textContent='WAITING FOR SCORER';document.querySelector('#matchStatus').textContent='WAITING'}}catch(e){document.querySelector('#liveLabel').textContent='VIEWER CONNECTION';document.querySelector('#matchStatus').textContent='RECONNECTING'}}
+function setupViewerMode(){if(!viewerMode)return;document.body.classList.add('viewer-mode');document.querySelector('#matchPanel').hidden=true;document.querySelector('#teamsPanel').hidden=true;document.querySelector('#matchPanel').style.display='none';document.querySelector('#teamsPanel').style.display='none';document.querySelectorAll('.tab[data-tab="teams"],.tab[data-tab="match"]').forEach(x=>x.remove());document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab==='stats'));['match','teams','stats','events','commentary'].forEach(t=>document.getElementById(t+'Panel').hidden=!['stats'].includes(t));document.querySelector('#settingsBtn').style.display='none';document.querySelector('#matchStatus').textContent='LIVE VIEWER';document.querySelector('.brand').innerHTML='⚽ <b>MATCHDAY</b> <span style="font-size:9px;color:var(--lime)">· LIVE VIEW</span>';document.querySelector('footer').textContent='MATCHDAY FOOTBALL SCORER · LIVE SPECTATOR VIEW';}
+
 </script></body></html>
