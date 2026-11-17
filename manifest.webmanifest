@@ -1,0 +1,11 @@
+{
+  "name": "Matchday Football Scorer",
+  "short_name": "Matchday",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b100e",
+  "theme_color": "#0b100e",
+  "description": "Interactive football match scoring demo",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
