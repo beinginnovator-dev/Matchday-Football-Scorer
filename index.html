@@ -137,11 +137,11 @@ body[data-ui-theme="dark"] .tabs .tab.active{background:#c5ff00!important;color:
 /* Sponsor logo leads the brand row and mirrors the selected sponsor animation */
 .match-meta .sponsor-brand-row{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0}
 .match-meta .sponsor-brand-row img{width:34px;height:34px;object-fit:contain;border-radius:7px;background:#fff;padding:2px;flex:none}
-.match-meta.anim-glow .sponsor-brand-row img{animation:sponsorGlow 1.8s ease-in-out infinite alternate}
+.match-meta.anim-glow .sponsor-brand-row img{animation:sponsorLogoGlow 1.8s ease-in-out infinite alternate}
 .match-meta.anim-breathe .sponsor-brand-row img{animation:sponsorBreathe 2.5s ease-in-out infinite}
 .match-meta.anim-shine .sponsor-brand-row img{animation:sponsorLogoShine 2.4s linear infinite}
 .match-meta.anim-pulse .sponsor-brand-row img{animation:sponsorLogoPulse 1.5s ease-in-out infinite}
-@keyframes sponsorLogoShine{0%,100%{filter:brightness(1);transform:scale(1)}50%{filter:brightness(1.45) drop-shadow(0 0 8px var(--lime));transform:scale(1.06)}}
+@keyframes sponsorLogoGlow{from{filter:drop-shadow(0 0 2px var(--lime))}to{filter:drop-shadow(0 0 7px var(--lime)) drop-shadow(0 0 13px var(--lime))}}@keyframes sponsorLogoShine{0%,100%{filter:brightness(1);transform:scale(1)}50%{filter:brightness(1.45) drop-shadow(0 0 8px var(--lime));transform:scale(1.06)}}
 @keyframes sponsorLogoPulse{50%{filter:drop-shadow(0 0 12px var(--lime));transform:scale(1.07)}}
 @media(max-width:420px){.match-meta .sponsor-brand-row img{width:30px;height:30px}}
 </style></head><body class="matches-view">
