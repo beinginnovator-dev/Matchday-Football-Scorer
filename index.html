@@ -1,87 +1,104 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b100e">
-<meta name="description" content="Matchday football match scoring demo">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b100e"><meta name="description" content="Live football match scorer">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>Matchday Football Scorer</title>
 <style>
 :root{--bg:#0b100e;--panel:#151d19;--panel2:#202b24;--lime:#b8f36b;--blue:#75a7ff;--muted:#8d9991;--line:#2a352e}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f7f4;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-header{height:62px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #202923;position:sticky;top:0;background:#0b100e;z-index:3}
-.brand{font-weight:900;letter-spacing:2px}.brand b{color:var(--lime)}.demo{font-size:10px;letter-spacing:1px;color:var(--lime);background:#253127;padding:7px 11px;border-radius:30px}
-main{max-width:760px;margin:auto;padding:14px 14px 30px}
-.score{background:linear-gradient(135deg,#202b24,#121916);border:1px solid #2b382f;border-radius:24px;padding:22px 18px;margin-top:5px}
-.live{text-align:center;color:var(--lime);font-size:10px;font-weight:900;letter-spacing:1.5px}
-.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;gap:10px;margin:23px 0}
-.crest{font-size:30px}.teamname{font-size:11px;font-weight:900;letter-spacing:1px;margin-top:8px}.goals{font-size:39px;font-weight:950;letter-spacing:3px}.half{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}
-.posrow{display:flex;justify-content:space-between;color:#c4cdc6;font-size:11px}.bar{display:flex;height:5px;border-radius:10px;overflow:hidden;margin-top:9px}.bar span:first-child{background:var(--lime)}.bar span:last-child{background:var(--blue)}
-.tabs{display:flex;gap:7px;margin:17px 0 13px}.tab{flex:1;border:0;border-radius:11px;padding:13px 5px;background:var(--panel);color:#aeb8b1;font-size:10px;font-weight:900;letter-spacing:1px}.tab.active{background:var(--lime);color:#10150f}
+header{height:62px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #202923;position:sticky;top:0;background:#0b100e;z-index:3}
+.brand{font-weight:900;letter-spacing:2px}.brand b{color:var(--lime)}.status{font-size:10px;letter-spacing:1px;color:var(--lime);background:#253127;padding:7px 11px;border-radius:30px}
+main{max-width:820px;margin:auto;padding:14px 14px 34px}.score{background:linear-gradient(135deg,#202b24,#121916);border:1px solid #2b382f;border-radius:24px;padding:20px 16px;margin-top:5px}
+.live{text-align:center;color:var(--lime);font-size:10px;font-weight:900;letter-spacing:1.5px}.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;gap:8px;margin:20px 0}
+.flag{font-size:29px}.teamname{font-size:11px;font-weight:900;letter-spacing:1px;margin-top:7px;max-width:150px;overflow-wrap:anywhere}.goals{font-size:39px;font-weight:950;letter-spacing:3px;white-space:nowrap}.clock{font-size:21px;font-weight:900;color:var(--lime);margin-top:5px}.half{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-top:4px}
+.tabs{display:flex;gap:7px;margin:16px 0 13px}.tab{flex:1;border:0;border-radius:11px;padding:13px 5px;background:var(--panel);color:#aeb8b1;font-size:10px;font-weight:900;letter-spacing:.7px}.tab.active{background:var(--lime);color:#10150f}
 .section-title{font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:900;margin:15px 2px 12px}
-.group,.statsbox,.event{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:12px}
-.group h3{font-size:12px;letter-spacing:1px;margin:0 0 12px}
-.actions{display:flex;flex-wrap:wrap;gap:7px}
-.action{border:0;background:#29362e;color:#f5f7f5;border-radius:10px;padding:10px 11px;font-size:11px;font-weight:750}.action.goal{background:var(--lime);color:#10150f}
-.controls{display:flex;gap:9px;margin:14px 0}.controls button{flex:1;padding:12px;border-radius:12px;border:1px solid #435044;background:transparent;color:white;font-weight:800}.controls .filled{background:#29362e;border:0}
-.reset{display:block;margin:10px auto 0;border:0;background:none;color:#aab5ad;padding:10px;font-weight:700}
-.statrow{margin:14px 0}.statlabels{display:flex;justify-content:space-between;font-size:12px}.statlabels span:nth-child(2){color:#aeb8b1}.statbar{display:flex;height:4px;border-radius:5px;overflow:hidden;margin-top:8px;background:#29332d}.statbar span:first-child{background:var(--lime)}.statbar span:last-child{background:var(--blue)}
-.event{display:flex;gap:12px;align-items:center;font-size:12px;font-weight:650}.dot{width:7px;height:7px;background:var(--lime);border-radius:50%;flex:none}
-.install{display:none;background:var(--lime);color:#111;padding:11px 14px;border:0;border-radius:12px;font-weight:900}
-footer{text-align:center;color:#68756c;font-size:10px;padding:12px}
-</style>
-</head>
-<body>
-<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><span class="demo">DEMO MODE</span></header>
+.group,.statsbox,.event,.teamcard{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:12px}.group h3{font-size:12px;letter-spacing:1px;margin:0 0 12px}
+.actions{display:flex;flex-wrap:wrap;gap:7px}.action{border:0;background:#29362e;color:#f5f7f5;border-radius:10px;padding:10px 11px;font-size:11px;font-weight:750}.action.goal{background:var(--lime);color:#10150f}
+.controls{display:flex;gap:8px;margin:12px 0}.controls button,.btn{flex:1;padding:12px;border-radius:12px;border:1px solid #435044;background:transparent;color:white;font-weight:800;font-size:11px}.controls .filled,.btn.primary{background:#29362e;border:0}.btn.green{background:var(--lime);color:#10150f;border:0}.btn.danger{border-color:#713b3b;color:#ffaaaa}
+input,select{width:100%;background:#0e1511;border:1px solid #354238;border-radius:10px;color:#fff;padding:12px;font:inherit;font-size:13px;min-width:0}
+.formrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.formrow.three{grid-template-columns:2fr 1fr auto}.small{font-size:10px;color:var(--muted);line-height:1.5}.member{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #28332c;font-size:12px}.member:last-child{border:0}.member button{border:0;background:transparent;color:#ffaaaa;font-size:17px}
+.statrow{margin:14px 0}.statlabels{display:flex;justify-content:space-between;font-size:12px;gap:8px}.statlabels span:nth-child(2){color:#aeb8b1;text-align:center}.statbar{display:flex;height:4px;border-radius:5px;overflow:hidden;margin-top:8px;background:#29332d}.statbar span:first-child{background:var(--lime)}.statbar span:last-child{background:var(--blue)}
+.event{display:flex;gap:10px;align-items:center;font-size:12px;font-weight:650}.dot{width:7px;height:7px;background:var(--lime);border-radius:50%;flex:none}.event small{color:var(--muted);margin-left:auto;white-space:nowrap}
+.install{display:none;background:var(--lime);color:#111;padding:10px 12px;border:0;border-radius:12px;font-weight:900}
+footer{text-align:center;color:#68756c;font-size:10px;padding:14px}.hidden{display:none!important}
+@media(max-width:420px){.tab{font-size:9px;padding:12px 2px}.goals{font-size:33px}.formrow.three{grid-template-columns:1fr 68px auto}}
+</style></head><body>
+<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><span class="status" id="matchStatus">NOT STARTED</span></header>
 <main>
 <section class="score">
- <div class="live" id="liveLabel">● LIVE MATCH · 67’</div>
+ <div class="live" id="liveLabel">MATCH CENTRE</div>
  <div class="teams">
-  <div><div class="crest">🟢</div><div class="teamname">NORTH FC</div></div>
-  <div><div class="goals"><span id="homeGoals">1</span> : <span id="awayGoals">0</span></div><div class="half">SECOND HALF</div></div>
-  <div><div class="crest">🔵</div><div class="teamname">CITY FC</div></div>
+  <div><div class="flag" id="homeFlag">🏳️</div><div class="teamname" id="homeName">HOME TEAM</div></div>
+  <div><div class="goals"><span id="homeGoals">0</span> : <span id="awayGoals">0</span></div><div class="clock" id="clock">00:00</div><div class="half" id="halfLabel">90 MIN MATCH</div></div>
+  <div><div class="flag" id="awayFlag">🏳️</div><div class="teamname" id="awayName">AWAY TEAM</div></div>
  </div>
- <div class="posrow"><span>Possession <b id="homePoss">54</b>%</span><span><b id="awayPoss">46</b>% Possession</span></div>
- <div class="bar"><span id="homePossBar" style="width:54%"></span><span id="awayPossBar" style="width:46%"></span></div>
 </section>
-<nav class="tabs"><button class="tab active" data-tab="match">MATCH</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button></nav>
+<nav class="tabs"><button class="tab active" data-tab="match">SCORER</button><button class="tab" data-tab="teams">TEAMS</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button></nav>
 <section id="matchPanel">
- <div class="section-title">QUICK ACTIONS</div>
- <div id="actionGroups"></div>
- <div class="controls"><button id="minuteBtn">＋ 1 MINUTE</button><button class="filled" id="pauseBtn">Ⅱ PAUSE</button></div>
- <button class="reset" id="resetBtn">↻ RESET DEMO MATCH</button>
+ <div class="section-title">MATCH CONTROL</div>
+ <div class="controls"><button class="btn green" id="startBtn">▶ START MATCH</button><button class="btn" id="halfBtn">Ⅱ HALF TIME</button><button class="btn" id="finishBtn">■ FINISH</button></div>
+ <div class="section-title">RECORD MATCH EVENTS · SELECT THE TEAM</div><div id="actionGroups"></div>
+ <div class="controls"><button class="btn" id="undoBtn">↶ UNDO LAST EVENT</button><button class="btn danger" id="resetBtn">RESET MATCH</button></div>
+ <p class="small">The match clock runs only while the match is started. Events are time-stamped and saved on this device.</p>
 </section>
-<section id="statsPanel" hidden><div class="section-title">MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
-<section id="eventsPanel" hidden><div class="section-title">MATCH TIMELINE</div><div id="eventList"></div></section>
-</main>
-<footer>LOCAL DEMO · Scores and events stay in this browser session</footer>
+<section id="teamsPanel" hidden>
+ <div class="section-title">TEAM SETUP</div><div id="teamEditors"></div>
+</section>
+<section id="statsPanel" hidden><div class="section-title">LIVE MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
+<section id="eventsPanel" hidden><div class="section-title">MATCH EVENT TIMELINE</div><div id="eventList"></div></section>
+</main><footer>MATCHDAY FOOTBALL SCORER · MATCH DATA SAVED ON THIS DEVICE</footer>
 <script>
-const names=['Goals','Shots','Shots on target','Corners','Fouls','Yellow cards','Red cards','Offsides','Saves'];
-const data={home:{goals:1,shots:8,target:4,corners:5,fouls:7,yellow:1,red:0,offsides:2,saves:0},away:{goals:0,shots:5,target:2,corners:3,fouls:9,yellow:2,red:0,offsides:1,saves:3}};
-let minute=67,paused=false,events=['67’  Match in progress','52’  Yellow card · Away','41’  Goal · Home','HT  Half-time'];
-const actions=[['⚽ Goal','goal'],['🎯 Shot on target','target'],['↗ Shot','shot'],['🚩 Corner','corner'],['✋ Foul','foul'],['🟨 Yellow','yellow'],['🟥 Red','red'],['⤴ Offside','offside'],['🧤 Save','save']];
-const labels={goal:'GOAL',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
+const KEY='matchday-live-v2';
+const flags=['🇮🇳','🇬🇧','🇧🇷','🇦🇷','🇫🇷','🇩🇪','🇪🇸','🇮🇹','🇵🇹','🇳🇱','🇯🇵','🇺🇸','🇲🇽','🇳🇬','🇿🇦','🇦🇺'];
+const blankStats=()=>({goals:0,shots:0,target:0,corners:0,fouls:0,yellow:0,red:0,offsides:0,saves:0});
+const fresh=()=>({teams:[{name:'HOME TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]},{name:'AWAY TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]}],stats:[blankStats(),blankStats()],seconds:0,running:false,started:false,finished:false,half:1,events:[]});
+let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{state=fresh()}
+const labels={goal:'Goal',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
+const statKeys={goal:'goals',target:'target',shot:'shots',corner:'corners',foul:'fouls',yellow:'yellow',red:'red',offside:'offsides',save:'saves'};
+const actions=[['⚽ Goal','goal'],['🎯 Shot on target','target'],['↗ Shot','shot'],['🚩 Corner','corner'],['✋ Foul','foul'],['🟨 Yellow card','yellow'],['🟥 Red card','red'],['⤴ Offside','offside'],['🧤 Save','save']];
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function time(){return String(Math.floor(state.seconds/60)).padStart(2,'0')+':'+String(state.seconds%60).padStart(2,'0')}
+function matchMinute(){return Math.floor(state.seconds/60)+1}
 function render(){
- document.querySelector('#homeGoals').textContent=data.home.goals;document.querySelector('#awayGoals').textContent=data.away.goals;
- document.querySelector('#liveLabel').textContent=(paused?'Ⅱ MATCH PAUSED':'● LIVE MATCH')+' · '+minute+'’';
- document.querySelector('#pauseBtn').textContent=paused?'▶ RESUME':'Ⅱ PAUSE';
- document.querySelector('#homePoss').textContent=54;document.querySelector('#awayPoss').textContent=46;
- document.querySelector('#homePossBar').style.width='54%';document.querySelector('#awayPossBar').style.width='46%';
- document.querySelector('#statsContent').innerHTML='<div class="statlabels" style="font-weight:900;color:var(--muted)"><span>NORTH FC</span><span></span><span>CITY FC</span></div>'+names.map((n)=>{let k=({'Goals':'goals','Shots':'shots','Shots on target':'target','Corners':'corners','Fouls':'fouls','Yellow cards':'yellow','Red cards':'red','Offsides':'offsides','Saves':'saves'})[n],a=data.home[k],b=data.away[k],sum=a+b||2;return `<div class="statrow"><div class="statlabels"><b>${a}</b><span>${n}</span><b>${b}</b></div><div class="statbar"><span style="width:${a/sum*100}%"></span><span style="width:${b/sum*100}%"></span></div></div>`}).join('');
- document.querySelector('#eventList').innerHTML=events.length?events.map(e=>`<div class="event"><span class="dot"></span>${e}</div>`).join(''):'<p style="color:var(--muted)">No events yet. Add match actions to build the timeline.</p>';
+ document.querySelector('#homeName').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#awayName').textContent=state.teams[1].name||'AWAY TEAM';
+ document.querySelector('#homeFlag').textContent=state.teams[0].flag;document.querySelector('#awayFlag').textContent=state.teams[1].flag;
+ document.querySelector('#homeGoals').textContent=state.stats[0].goals;document.querySelector('#awayGoals').textContent=state.stats[1].goals;
+ document.querySelector('#clock').textContent=time();document.querySelector('#halfLabel').textContent=state.finished?'FULL TIME':state.half===1?'FIRST HALF':'SECOND HALF';
+ document.querySelector('#liveLabel').textContent=state.finished?'■ FULL TIME':state.running?'● LIVE MATCH':state.started?'Ⅱ MATCH PAUSED':'MATCH CENTRE';
+ document.querySelector('#matchStatus').textContent=state.finished?'FULL TIME':state.running?'LIVE':state.started?'PAUSED':'READY';
+ document.querySelector('#startBtn').textContent=state.finished?'MATCH FINISHED':state.running?'Ⅱ PAUSE':'▶ '+(state.started?'RESUME MATCH':'START MATCH');
+ document.querySelector('#startBtn').disabled=state.finished;document.querySelector('#halfBtn').disabled=!state.started||state.finished;
+ document.querySelector('#statsContent').innerHTML='<div class="statlabels" style="font-weight:900;color:var(--muted)"><span>'+esc(state.teams[0].name)+'</span><span>STAT</span><span>'+esc(state.teams[1].name)+'</span></div>'+[['Goals','goals'],['Shots','shots'],['Shots on target','target'],['Corners','corners'],['Fouls','fouls'],['Yellow cards','yellow'],['Red cards','red'],['Offsides','offsides'],['Saves','saves']].map(([n,k])=>{let a=state.stats[0][k],b=state.stats[1][k],sum=a+b||1;return '<div class="statrow"><div class="statlabels"><b>'+a+'</b><span>'+n+'</span><b>'+b+'</b></div><div class="statbar"><span style="width:'+a/sum*100+'%"></span><span style="width:'+b/sum*100+'%"></span></div></div>'}).join('');
+ document.querySelector('#eventList').innerHTML=state.events.length?state.events.slice().reverse().map(e=>'<div class="event"><span class="dot"></span><span>'+esc(e.team)+' · '+esc(e.label)+'</span><small>'+e.minute+"' · "+e.clock+'</small></div>').join(''):'<p class="small">No events recorded yet.</p>';
+ renderTeams();save();
 }
-function add(team,key){if(paused)return;data[team][key]++;events.unshift(`${minute}’  ${labels[key]} · ${team==='home'?'Home':'Away'}`);render()}
-document.querySelector('#actionGroups').innerHTML=['home','away'].map((team,i)=>`<div class="group"><h3>${i?'🔵 CITY FC':'🟢 NORTH FC'}</h3><div class="actions">${actions.map(([label,key])=>`<button class="action ${key==='goal'?'goal':''}" data-team="${team}" data-key="${key}">${label}</button>`).join('')}</div></div>`).join('');
-document.querySelectorAll('.action').forEach(b=>b.addEventListener('click',()=>add(b.dataset.team,b.dataset.key)));
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['match','stats','events'].forEach(t=>document.getElementById(t+'Panel').hidden=t!==b.dataset.tab);});
-document.querySelector('#minuteBtn').onclick=()=>{if(!paused){minute=Math.min(120,minute+1);render()}};
-document.querySelector('#pauseBtn').onclick=()=>{paused=!paused;render()};
-document.querySelector('#resetBtn').onclick=()=>{Object.keys(data).forEach(t=>Object.keys(data[t]).forEach(k=>data[t][k]=0));minute=0;events=[];paused=false;render()};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function record(team,key){
+ if(!state.started||state.finished){alert('Start the match before recording events.');return}
+ let s=state.stats[team],k=statKeys[key];s[k]++;
+ if(key==='goal'){s.shots++;s.target++}if(key==='target')s.shots++;
+ state.events.push({team:state.teams[team].name,label:labels[key],key,teamIndex:team,minute:matchMinute(),clock:time(),changes:key==='goal'?['goals','shots','target']:key==='target'?['target','shots']:[k]});
+ render();
+}
+function renderTeams(){
+ document.querySelector('#teamEditors').innerHTML=state.teams.map((t,i)=>'<div class="teamcard"><h3>'+ (i===0?'HOME TEAM':'AWAY TEAM')+'</h3><div class="formrow"><input id="teamName'+i+'" value="'+esc(t.name)+'" placeholder="Team name"><input id="teamFlag'+i+'" value="'+esc(t.flag)+'" maxlength="4" aria-label="Team flag emoji"></div><button class="btn" data-save-team="'+i+'">SAVE TEAM DETAILS</button><div class="section-title">SQUAD MEMBERS · '+t.members.length+'</div><div>'+t.members.map((m,j)=>'<div class="member"><span>'+(j+1)+'. '+esc(m)+'</span><button data-remove="'+i+':'+j+'" aria-label="Remove player">×</button></div>').join('')+'</div><div class="formrow three"><input id="newMember'+i+'" placeholder="Player name"><input id="shirt'+i+'" type="number" min="1" max="99" placeholder="No."><button class="btn green" data-add="'+i+'">ADD</button></div><p class="small">Choose any country flag emoji for this team. A random flag is assigned automatically when a new match is created.</p></div>').join('');
+ document.querySelectorAll('[data-save-team]').forEach(b=>b.onclick=()=>{let i=+b.dataset.saveTeam;state.teams[i].name=document.querySelector('#teamName'+i).value.trim()||('TEAM '+(i+1));state.teams[i].flag=document.querySelector('#teamFlag'+i).value.trim()||'🏳️';render()});
+ document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{let i=+b.dataset.add,el=document.querySelector('#newMember'+i),name=el.value.trim();if(!name)return;let no=document.querySelector('#shirt'+i).value;state.teams[i].members.push((no?'#'+no+' ':'')+name);render()});
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{let [i,j]=b.dataset.remove.split(':').map(Number);state.teams[i].members.splice(j,1);render()});
+}
+document.querySelector('#actionGroups').innerHTML=[0,1].map(i=>'<div class="group"><h3 id="actionTeam'+i+'">'+(i===0?'HOME TEAM':'AWAY TEAM')+'</h3><div class="actions">'+actions.map(([label,key])=>'<button class="action '+(key==='goal'?'goal':'')+'" data-team="'+i+'" data-key="'+key+'">'+label+'</button>').join('')+'</div></div>').join('');
+document.querySelectorAll('.action').forEach(b=>b.onclick=()=>record(+b.dataset.team,b.dataset.key));
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['match','teams','stats','events'].forEach(t=>document.getElementById(t+'Panel').hidden=t!==b.dataset.tab)});
+document.querySelector('#startBtn').onclick=()=>{if(state.finished)return;state.started=true;state.running=!state.running;render()};
+document.querySelector('#halfBtn').onclick=()=>{if(!state.started||state.finished)return;state.running=false;state.half=state.half===1?2:1;state.events.push({team:'MATCH',label:state.half===2?'Half time · Second half started':'Second half ended',minute:matchMinute(),clock:time()});render()};
+document.querySelector('#finishBtn').onclick=()=>{if(!state.started||state.finished)return;state.running=false;state.finished=true;state.events.push({team:'MATCH',label:'Full time',minute:matchMinute(),clock:time()});render()};
+document.querySelector('#undoBtn').onclick=()=>{let e=state.events.pop();if(!e){alert('No event to undo.');return}if(e.changes)e.changes.forEach(k=>state.stats[e.teamIndex][k]=Math.max(0,state.stats[e.teamIndex][k]-1));render()};
+document.querySelector('#resetBtn').onclick=()=>{if(!confirm('Reset the score, timer and event timeline? Team names and squads will be kept.'))return;let teams=state.teams;state=fresh();state.teams=teams;render()};
+setInterval(()=>{if(state.running&&!state.finished){state.seconds++;render()}},1000);
 let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;document.querySelector('#installBtn').style.display='block'});
 document.querySelector('#installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;document.querySelector('#installBtn').style.display='none'}};
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
 render();
-</script>
-</body></html>
+</script></body></html>
