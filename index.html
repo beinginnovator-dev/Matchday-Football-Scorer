@@ -42,14 +42,14 @@ input,select{width:100%;background:#0e1511;border:1px solid #354238;border-radiu
  </div>
 </section>
 <nav class="tabs"><button class="tab active" data-tab="teams">TEAMS / NEW MATCH</button><button class="tab" data-tab="match">SCORER</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button></nav>
-<section id="matchPanel">
+<section id="matchPanel" hidden>
  <div class="section-title">MATCH CONTROL</div>
  <div class="controls"><button class="btn green" id="startBtn">▶ START MATCH</button><button class="btn" id="halfBtn">Ⅱ HALF TIME</button><button class="btn" id="finishBtn">■ FINISH</button></div>
  <div class="section-title">RECORD MATCH EVENTS</div><select class="team-select" id="eventTeamSelect" aria-label="Select team"><option value="0">HOME TEAM</option><option value="1">AWAY TEAM</option></select><div class="group"><div class="actions" id="eventActions"></div></div>
  <div class="controls"><button class="btn" id="undoBtn">↶ UNDO LAST EVENT</button><button class="btn danger" id="resetBtn">RESET MATCH</button></div>
  <p class="small">The match clock runs only while the match is started. Events are time-stamped and saved on this device.</p>
 </section>
-<section id="teamsPanel" hidden>
+<section id="teamsPanel">
  <div class="section-title">NEW MATCH · TEAM SETUP</div><div id="teamEditors"></div><div class="controls"><button class="btn green" id="newMatchBtn">＋ NEW MATCH</button><button class="btn danger" id="endResetBtn">■ END & RESET</button></div><p class="small">Set both teams and squads before starting a new match. New Match clears the previous score, timer and events while keeping team names and squads.</p>
 </section>
 <section id="statsPanel" hidden><div class="section-title">LIVE MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
@@ -119,6 +119,6 @@ if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.ser
 document.querySelector('#settingsBtn').onclick=()=>document.querySelector('#settingsPanel').classList.toggle('open');
 document.querySelector('#themeSelect').onchange=e=>{document.body.dataset.theme=e.target.value==='default'?'':e.target.value;localStorage.setItem('matchday-theme',e.target.value)};
 document.body.dataset.theme=localStorage.getItem('matchday-theme')||'';
-document.querySelector('#shareViewerBtn').onclick=async()=>{const url=location.origin+location.pathname+'?view=1';try{if(navigator.share)await navigator.share({title:'Matchday Football Live Viewer',url});else{await navigator.clipboard.writeText(url);alert('Viewer link copied. Note: live shared viewing requires the real-time viewer service, which is not connected yet.')}}catch(e){}};
+document.querySelector('#shareViewerBtn').onclick=()=>alert('Live viewer sharing is not ready yet. A shared real-time match service must be connected before a working spectator link can be created.');
 render();
 </script></body></html>
