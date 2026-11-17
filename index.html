@@ -109,6 +109,20 @@ body[data-ui-theme="light"] header,body[data-ui-theme="dark"] header{color:#f4f7
 .goals span{color:#e4ff78;text-shadow:0 0 6px #c5ff00,0 0 16px #9ed600,0 0 32px #78a800aa}
 .clock{color:#d8ff4d;text-shadow:0 0 8px #c5ff00,0 0 18px #8dbb00}
 
+
+/* Refined workspace contrast, unified navigation and scoreboard typography */
+body[data-ui-theme="light"]{--bg:#eef0f2;--panel:#ffffff;--panel2:#f5f6f7;--muted:#626970;--line:#d9dde1;background:#eef0f2;color:#202124}
+body[data-ui-theme="light"] main{background:#eef0f2}
+body[data-ui-theme="light"] .group,body[data-ui-theme="light"] .statsbox,body[data-ui-theme="light"] .event,body[data-ui-theme="light"] .teamcard,body[data-ui-theme="light"] .commentary,body[data-ui-theme="light"] .history-card{background:#fff;border-color:#d9dde1;color:#202124}
+body[data-ui-theme="light"] .tabs .tab{background:#e1e4e8!important;color:#454b52!important;border:1px solid #d4d8dd!important;box-shadow:none}
+body[data-ui-theme="light"] .tabs .tab.active{background:#c5ff00!important;color:#172000!important;border-color:#a8d900!important;box-shadow:0 2px 8px #91b90035}
+body[data-ui-theme="dark"] .tabs .tab{background:#202923!important;color:#c8d0ca!important;border:1px solid #303b33!important;box-shadow:none}
+body[data-ui-theme="dark"] .tabs .tab.active{background:#c5ff00!important;color:#172000!important;border-color:#a8d900!important;outline:none;box-shadow:0 2px 12px #c5ff0040}
+.goals,.goals span{font-family:"Roboto Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:2px}
+.goals{color:#dfff63;text-shadow:0 0 5px #c5ff00,0 0 12px #a7df00,0 0 22px #83b90088}
+.goals span{color:#e7ff9a;text-shadow:0 0 5px #c5ff00,0 0 12px #a7df00,0 0 22px #83b90088}
+.match-meta .sponsor-name{font-size:15px!important;line-height:1.25;letter-spacing:1.15px;font-weight:950}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="light">Google White · Light</option><option value="dark">Matchday Night · Dark</option></select><p class="small">Switch between a clean white workspace and a full dark theme.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
