@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b100e">
+<meta name="description" content="Matchday football match scoring demo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Matchday Football Scorer</title>
+<style>
+:root{--bg:#0b100e;--panel:#151d19;--panel2:#202b24;--lime:#b8f36b;--blue:#75a7ff;--muted:#8d9991;--line:#2a352e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f7f4;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+header{height:62px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #202923;position:sticky;top:0;background:#0b100e;z-index:3}
+.brand{font-weight:900;letter-spacing:2px}.brand b{color:var(--lime)}.demo{font-size:10px;letter-spacing:1px;color:var(--lime);background:#253127;padding:7px 11px;border-radius:30px}
+main{max-width:760px;margin:auto;padding:14px 14px 30px}
+.score{background:linear-gradient(135deg,#202b24,#121916);border:1px solid #2b382f;border-radius:24px;padding:22px 18px;margin-top:5px}
+.live{text-align:center;color:var(--lime);font-size:10px;font-weight:900;letter-spacing:1.5px}
+.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;gap:10px;margin:23px 0}
+.crest{font-size:30px}.teamname{font-size:11px;font-weight:900;letter-spacing:1px;margin-top:8px}.goals{font-size:39px;font-weight:950;letter-spacing:3px}.half{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}
+.posrow{display:flex;justify-content:space-between;color:#c4cdc6;font-size:11px}.bar{display:flex;height:5px;border-radius:10px;overflow:hidden;margin-top:9px}.bar span:first-child{background:var(--lime)}.bar span:last-child{background:var(--blue)}
+.tabs{display:flex;gap:7px;margin:17px 0 13px}.tab{flex:1;border:0;border-radius:11px;padding:13px 5px;background:var(--panel);color:#aeb8b1;font-size:10px;font-weight:900;letter-spacing:1px}.tab.active{background:var(--lime);color:#10150f}
+.section-title{font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:900;margin:15px 2px 12px}
+.group,.statsbox,.event{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:12px}
+.group h3{font-size:12px;letter-spacing:1px;margin:0 0 12px}
+.actions{display:flex;flex-wrap:wrap;gap:7px}
+.action{border:0;background:#29362e;color:#f5f7f5;border-radius:10px;padding:10px 11px;font-size:11px;font-weight:750}.action.goal{background:var(--lime);color:#10150f}
+.controls{display:flex;gap:9px;margin:14px 0}.controls button{flex:1;padding:12px;border-radius:12px;border:1px solid #435044;background:transparent;color:white;font-weight:800}.controls .filled{background:#29362e;border:0}
+.reset{display:block;margin:10px auto 0;border:0;background:none;color:#aab5ad;padding:10px;font-weight:700}
+.statrow{margin:14px 0}.statlabels{display:flex;justify-content:space-between;font-size:12px}.statlabels span:nth-child(2){color:#aeb8b1}.statbar{display:flex;height:4px;border-radius:5px;overflow:hidden;margin-top:8px;background:#29332d}.statbar span:first-child{background:var(--lime)}.statbar span:last-child{background:var(--blue)}
+.event{display:flex;gap:12px;align-items:center;font-size:12px;font-weight:650}.dot{width:7px;height:7px;background:var(--lime);border-radius:50%;flex:none}
+.install{display:none;background:var(--lime);color:#111;padding:11px 14px;border:0;border-radius:12px;font-weight:900}
+footer{text-align:center;color:#68756c;font-size:10px;padding:12px}
+</style>
+</head>
+<body>
+<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><span class="demo">DEMO MODE</span></header>
+<main>
+<section class="score">
+ <div class="live" id="liveLabel">● LIVE MATCH · 67’</div>
+ <div class="teams">
+  <div><div class="crest">🟢</div><div class="teamname">NORTH FC</div></div>
+  <div><div class="goals"><span id="homeGoals">1</span> : <span id="awayGoals">0</span></div><div class="half">SECOND HALF</div></div>
+  <div><div class="crest">🔵</div><div class="teamname">CITY FC</div></div>
+ </div>
+ <div class="posrow"><span>Possession <b id="homePoss">54</b>%</span><span><b id="awayPoss">46</b>% Possession</span></div>
+ <div class="bar"><span id="homePossBar" style="width:54%"></span><span id="awayPossBar" style="width:46%"></span></div>
+</section>
+<nav class="tabs"><button class="tab active" data-tab="match">MATCH</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button></nav>
+<section id="matchPanel">
+ <div class="section-title">QUICK ACTIONS</div>
+ <div id="actionGroups"></div>
+ <div class="controls"><button id="minuteBtn">＋ 1 MINUTE</button><button class="filled" id="pauseBtn">Ⅱ PAUSE</button></div>
+ <button class="reset" id="resetBtn">↻ RESET DEMO MATCH</button>
+</section>
+<section id="statsPanel" hidden><div class="section-title">MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
+<section id="eventsPanel" hidden><div class="section-title">MATCH TIMELINE</div><div id="eventList"></div></section>
+</main>
+<footer>LOCAL DEMO · Scores and events stay in this browser session</footer>
+<script>
+const names=['Goals','Shots','Shots on target','Corners','Fouls','Yellow cards','Red cards','Offsides','Saves'];
+const data={home:{goals:1,shots:8,target:4,corners:5,fouls:7,yellow:1,red:0,offsides:2,saves:0},away:{goals:0,shots:5,target:2,corners:3,fouls:9,yellow:2,red:0,offsides:1,saves:3}};
+let minute=67,paused=false,events=['67’  Match in progress','52’  Yellow card · Away','41’  Goal · Home','HT  Half-time'];
+const actions=[['⚽ Goal','goal'],['🎯 Shot on target','target'],['↗ Shot','shot'],['🚩 Corner','corner'],['✋ Foul','foul'],['🟨 Yellow','yellow'],['🟥 Red','red'],['⤴ Offside','offside'],['🧤 Save','save']];
+const labels={goal:'GOAL',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
+function render(){
+ document.querySelector('#homeGoals').textContent=data.home.goals;document.querySelector('#awayGoals').textContent=data.away.goals;
+ document.querySelector('#liveLabel').textContent=(paused?'Ⅱ MATCH PAUSED':'● LIVE MATCH')+' · '+minute+'’';
+ document.querySelector('#pauseBtn').textContent=paused?'▶ RESUME':'Ⅱ PAUSE';
+ document.querySelector('#homePoss').textContent=54;document.querySelector('#awayPoss').textContent=46;
+ document.querySelector('#homePossBar').style.width='54%';document.querySelector('#awayPossBar').style.width='46%';
+ document.querySelector('#statsContent').innerHTML='<div class="statlabels" style="font-weight:900;color:var(--muted)"><span>NORTH FC</span><span></span><span>CITY FC</span></div>'+names.map((n)=>{let k=({'Goals':'goals','Shots':'shots','Shots on target':'target','Corners':'corners','Fouls':'fouls','Yellow cards':'yellow','Red cards':'red','Offsides':'offsides','Saves':'saves'})[n],a=data.home[k],b=data.away[k],sum=a+b||2;return `<div class="statrow"><div class="statlabels"><b>${a}</b><span>${n}</span><b>${b}</b></div><div class="statbar"><span style="width:${a/sum*100}%"></span><span style="width:${b/sum*100}%"></span></div></div>`}).join('');
+ document.querySelector('#eventList').innerHTML=events.length?events.map(e=>`<div class="event"><span class="dot"></span>${e}</div>`).join(''):'<p style="color:var(--muted)">No events yet. Add match actions to build the timeline.</p>';
+}
+function add(team,key){if(paused)return;data[team][key]++;events.unshift(`${minute}’  ${labels[key]} · ${team==='home'?'Home':'Away'}`);render()}
+document.querySelector('#actionGroups').innerHTML=['home','away'].map((team,i)=>`<div class="group"><h3>${i?'🔵 CITY FC':'🟢 NORTH FC'}</h3><div class="actions">${actions.map(([label,key])=>`<button class="action ${key==='goal'?'goal':''}" data-team="${team}" data-key="${key}">${label}</button>`).join('')}</div></div>`).join('');
+document.querySelectorAll('.action').forEach(b=>b.addEventListener('click',()=>add(b.dataset.team,b.dataset.key)));
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['match','stats','events'].forEach(t=>document.getElementById(t+'Panel').hidden=t!==b.dataset.tab);});
+document.querySelector('#minuteBtn').onclick=()=>{if(!paused){minute=Math.min(120,minute+1);render()}};
+document.querySelector('#pauseBtn').onclick=()=>{paused=!paused;render()};
+document.querySelector('#resetBtn').onclick=()=>{Object.keys(data).forEach(t=>Object.keys(data[t]).forEach(k=>data[t][k]=0));minute=0;events=[];paused=false;render()};
+let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;document.querySelector('#installBtn').style.display='block'});
+document.querySelector('#installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;document.querySelector('#installBtn').style.display='none'}};
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+render();
+</script>
+</body></html>
