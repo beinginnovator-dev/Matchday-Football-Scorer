@@ -292,7 +292,7 @@ render();
 syncAudioToggles();setupViewerMode();
 if(roomId&&(viewerMode||writerToken))connectLiveSocket();
 if(viewerMode){
- setInterval(()=>{if(liveSocket&&liveSocket.readyState===WebSocket.OPEN){try{liveSocket.send(JSON.stringify({type:'ping'}))}catch(e){}}else loadViewerState()},5000);
+ setInterval(()=>{if(liveSocket&&liveSocket.readyState===WebSocket.OPEN){try{liveSocket.send('ping')}catch(e){}}else loadViewerState()},5000);
 }else if(roomId){
  setInterval(()=>{if(!liveSocket||liveSocket.readyState!==WebSocket.OPEN)refreshViewerCount()},5000);
  refreshViewerCount();
