@@ -123,6 +123,16 @@ body[data-ui-theme="dark"] .tabs .tab.active{background:#c5ff00!important;color:
 .goals span{color:#e7ff9a;text-shadow:0 0 5px #c5ff00,0 0 12px #a7df00,0 0 22px #83b90088}
 .match-meta .sponsor-name{font-size:15px!important;line-height:1.25;letter-spacing:1.15px;font-weight:950}
 
+
+/* Team identity stack, clean non-glowing score, and paired sponsor identity */
+.teamline,.teamline.away{flex-direction:column!important;gap:5px!important}
+.teamline .flag{font-size:27px!important;line-height:1.15}
+.teamline .teamname,.teamline.away .teamname{max-width:150px;text-align:center!important;font-size:12px;margin:0;overflow-wrap:anywhere}
+.goals,.goals span{color:#dfff63!important;text-shadow:none!important}
+.match-meta .sponsor-name{font-size:16px!important}
+.match-meta .sponsor-brand-row{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0}
+.match-meta .sponsor-brand-row img{width:34px;height:34px;object-fit:contain;border-radius:7px;background:#fff;padding:2px;flex:none}
+@media(max-width:420px){.match-meta .sponsor-brand-row img{width:30px;height:30px}}
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="light">Google White · Light</option><option value="dark">Matchday Night · Dark</option></select><p class="small">Switch between a clean white workspace and a full dark theme.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
@@ -130,7 +140,7 @@ body[data-ui-theme="dark"] .tabs .tab.active{background:#c5ff00!important;color:
 <section class="score" id="scoreCard">
  <div class="confetti-layer" id="goalConfetti"></div>
  <div class="result-banner" id="resultBanner"><div class="confetti-layer" id="resultConfetti"></div><strong id="resultTitle">FULL TIME</strong><span id="resultSubtitle"></span></div>
- <div class="score-topline"><div class="live" id="liveLabel">MATCH CENTRE</div><span class="viewer-count" id="viewerCount">● 0 VIEWERS</span></div><div class="match-meta" id="matchMetaBanner"><img id="sponsorLogoDisplay" alt="Sponsor logo" style="display:none"><div class="meta-copy"><span class="presented-line" id="metaPresented">PRESENTED BY</span><strong class="sponsor-name" id="metaSponsor">SPONSOR NAME</strong><span id="metaDetails">FRIENDLY · VENUE TBC</span></div></div><div class="event-pop hidden" id="eventPop"></div>
+ <div class="score-topline"><div class="live" id="liveLabel">MATCH CENTRE</div><span class="viewer-count" id="viewerCount">● 0 VIEWERS</span></div><div class="match-meta" id="matchMetaBanner"><div class="meta-copy"><span class="presented-line" id="metaPresented">PRESENTED BY</span><div class="sponsor-brand-row"><strong class="sponsor-name" id="metaSponsor">SPONSOR NAME</strong><img id="sponsorLogoDisplay" alt="Sponsor logo" style="display:none"></div><span id="metaDetails">FRIENDLY · VENUE TBC</span></div></div><div class="event-pop hidden" id="eventPop"></div>
  <div class="teams">
   <div class="teamline"><div class="flag" id="homeFlag">🏳️</div><div class="teamname" id="homeName">HOME TEAM</div></div>
   <div><div class="goals"><span id="homeGoals">0</span> : <span id="awayGoals">0</span></div></div>
