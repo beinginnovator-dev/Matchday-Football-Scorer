@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b100e"><meta name="description" content="Live football match scorer">
+<meta name="theme-color" content="#f4f6fa"><meta name="description" content="Live football match scorer">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>Matchday Football Scorer</title>
 <style>
@@ -144,6 +144,52 @@ body[data-ui-theme="dark"] .tabs .tab.active{background:#c5ff00!important;color:
 @keyframes sponsorLogoGlow{from{filter:drop-shadow(0 0 2px var(--lime))}to{filter:drop-shadow(0 0 7px var(--lime)) drop-shadow(0 0 13px var(--lime))}}@keyframes sponsorLogoShine{0%,100%{filter:brightness(1);transform:scale(1)}50%{filter:brightness(1.45) drop-shadow(0 0 8px var(--lime));transform:scale(1.06)}}
 @keyframes sponsorLogoPulse{50%{filter:drop-shadow(0 0 12px var(--lime));transform:scale(1.07)}}
 @media(max-width:420px){.match-meta .sponsor-brand-row img{width:30px;height:30px}}
+
+/* MCS-inspired white, navy, blue and black appearance */
+:root{--bg:#f4f6fa;--panel:#ffffff;--panel2:#edf3fa;--blue:#1476d4;--muted:#64748b;--line:#dbe3ed}
+body[data-ui-theme="light"]{--bg:#f4f6fa;--panel:#fff;--panel2:#edf3fa;--muted:#64748b;--line:#dbe3ed;background:#f4f6fa;color:#111827}
+body[data-ui-theme="light"] main{background:#f4f6fa}
+body[data-ui-theme="light"] header{background:#fff;color:#101828;border-bottom:1px solid #dbe3ed;box-shadow:0 2px 8px #0b1b3210}
+body[data-ui-theme="light"] .brand{color:#01002c}
+body[data-ui-theme="light"] .brand b{color:#1476d4}
+body[data-ui-theme="light"] .tabs .tab{background:#fff!important;color:#263449!important;border:1px solid #dbe3ed!important;box-shadow:0 1px 3px #0b1b3208}
+body[data-ui-theme="light"] .tabs .tab.active{background:#1476d4!important;color:#fff!important;border-color:#1476d4!important;box-shadow:0 3px 9px #1476d433}
+body[data-ui-theme="light"] .section-title{color:#34445b}
+body[data-ui-theme="light"] .group,body[data-ui-theme="light"] .statsbox,body[data-ui-theme="light"] .event,body[data-ui-theme="light"] .teamcard,body[data-ui-theme="light"] .commentary,body[data-ui-theme="light"] .history-card{background:#fff;border:1px solid #dbe3ed;color:#111827;box-shadow:0 2px 8px #0b1b3209}
+body[data-ui-theme="light"] .group h3,body[data-ui-theme="light"] .teamcard h3,body[data-ui-theme="light"] .history-card h3{color:#101828}
+body[data-ui-theme="light"] .small,body[data-ui-theme="light"] .event small,body[data-ui-theme="light"] .member{color:#64748b}
+body[data-ui-theme="light"] input,body[data-ui-theme="light"] select{background:#fff;border:1px solid #cbd5e1;color:#111827}
+body[data-ui-theme="light"] .action{background:#edf3fa;border:1px solid #d7e2ef;color:#111827}
+body[data-ui-theme="light"] .action.goal,body[data-ui-theme="light"] .btn.green{background:#1476d4!important;border-color:#1476d4!important;color:#fff!important}
+body[data-ui-theme="light"] .controls button,body[data-ui-theme="light"] .btn{background:#fff;border-color:#cbd5e1;color:#172033}
+body[data-ui-theme="light"] .controls .filled,body[data-ui-theme="light"] .btn.primary{background:#e8f1fb;border-color:#c8dcf2;color:#0b3d70}
+body[data-ui-theme="light"] .btn.danger{border-color:#e5b8b8;color:#b42318}
+body[data-ui-theme="light"] .settings-btn{background:#fff;border-color:#dbe3ed;color:#101828}
+body[data-ui-theme="light"] .settings-panel,body[data-ui-theme="light"] .modal{background:#fff;border-color:#dbe3ed;color:#111827;box-shadow:0 12px 34px #0b1b321c}
+body[data-ui-theme="light"] .statlabels span:nth-child(2){color:#64748b}
+body[data-ui-theme="light"] .statbar{background:#e5eaf1}
+body[data-ui-theme="light"] .statbar span:first-child{background:#1476d4}
+body[data-ui-theme="light"] .statbar span:last-child{background:#101828}
+body[data-ui-theme="light"] .dot{background:#1476d4}
+body[data-ui-theme="light"] .member{border-bottom-color:#e8edf3}
+body[data-ui-theme="light"] .history-detail{border-top-color:#e2e8f0}
+body[data-ui-theme="light"] footer{color:#64748b}
+/* MCS-style navy broadcast scoreboard with crisp blue highlights */
+body[data-ui-theme="light"] .score{background:linear-gradient(145deg,#01002c,#0a0a3a)!important;border:1px solid #1c2d61!important;box-shadow:0 8px 28px #01002c24!important;color:#fff}
+body[data-ui-theme="light"] .score .live,body[data-ui-theme="light"] .score .clock,body[data-ui-theme="light"] .score .viewer-count{color:#7dd3fc!important;text-shadow:none!important}
+body[data-ui-theme="light"] .score .goals,body[data-ui-theme="light"] .score .goals span{color:#fff!important;text-shadow:none!important}
+body[data-ui-theme="light"] .score .teamname,body[data-ui-theme="light"] .score .teamline .teamname{color:#fff}
+body[data-ui-theme="light"] .score .half,body[data-ui-theme="light"] .score .player-highlights div{color:#cbd5e1}
+body[data-ui-theme="light"] .score .player-highlights b{color:#7dd3fc}
+body[data-ui-theme="light"] .score .match-meta{background:linear-gradient(100deg,#080d35,#102b58,#080d35)!important;border:1px solid #315a91!important;box-shadow:none!important}
+body[data-ui-theme="light"] .score .match-meta strong,body[data-ui-theme="light"] .score .match-meta .fixture-line,body[data-ui-theme="light"] .score .match-meta .sponsor-name{color:#7dd3fc!important}
+body[data-ui-theme="light"] .score .match-meta .presented-line,body[data-ui-theme="light"] .score .match-meta span{color:#e2e8f0!important}
+body[data-ui-theme="light"] .score .result-banner{background:linear-gradient(100deg,#dbeafe,#93c5fd,#dbeafe)!important;color:#0b1b36!important;border-color:#60a5fa!important;box-shadow:none!important}
+body[data-ui-theme="light"] .score .result-banner span{color:#1e3a5f!important}
+body[data-ui-theme="light"] .score .match-time-strip{color:#64748b}
+body[data-ui-theme="light"] .viewer-count{color:#1476d4}
+@media(max-width:420px){body[data-ui-theme="light"] .tabs .tab{font-size:9px}}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="light">Google White · Light</option><option value="dark">Matchday Night · Dark</option></select><p class="small">Switch between a clean white workspace and a full dark theme.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
