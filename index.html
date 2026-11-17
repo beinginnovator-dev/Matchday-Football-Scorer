@@ -62,7 +62,7 @@ function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 function time(){return String(Math.floor(state.seconds/60)).padStart(2,'0')+':'+String(state.seconds%60).padStart(2,'0')}
 function matchMinute(){return Math.floor(state.seconds/60)+1}
 function render(){
- document.querySelector('#homeName').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#awayName').textContent=state.teams[1].name||'AWAY TEAM';
+ document.querySelector('#homeName').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#awayName').textContent=state.teams[1].name||'AWAY TEAM';document.querySelector('#actionTeam0').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#actionTeam1').textContent=state.teams[1].name||'AWAY TEAM';
  document.querySelector('#homeFlag').textContent=state.teams[0].flag;document.querySelector('#awayFlag').textContent=state.teams[1].flag;
  document.querySelector('#homeGoals').textContent=state.stats[0].goals;document.querySelector('#awayGoals').textContent=state.stats[1].goals;
  document.querySelector('#clock').textContent=time();document.querySelector('#halfLabel').textContent=state.finished?'FULL TIME':state.half===1?'FIRST HALF':'SECOND HALF';
