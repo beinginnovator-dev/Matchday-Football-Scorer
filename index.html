@@ -6,6 +6,11 @@
 <title>Matchday Football Scorer</title>
 <style>
 :root{--bg:#0b100e;--panel:#151d19;--panel2:#202b24;--lime:#b8f36b;--blue:#75a7ff;--muted:#8d9991;--line:#2a352e}
+body[data-theme="fifa"]{--bg:#061b16;--panel:#0d3026;--panel2:#174638;--lime:#b7f34b;--blue:#61d5b0;--line:#235444}
+body[data-theme="epl"]{--bg:#100b20;--panel:#1d1534;--panel2:#2b2050;--lime:#e8a7ff;--blue:#78a7ff;--line:#3a2d60}
+body[data-theme="laliga"]{--bg:#160c0c;--panel:#291616;--panel2:#3a2020;--lime:#ffb45e;--blue:#ff7777;--line:#563030}
+body[data-theme="bundesliga"]{--bg:#130909;--panel:#241313;--panel2:#351b1b;--lime:#ff5d5d;--blue:#f5b64c;--line:#4d2929}
+body[data-theme="ucl"]{--bg:#070e22;--panel:#111d3a;--panel2:#1a2b52;--lime:#75a7ff;--blue:#b8d4ff;--line:#263d70}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f7f4;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
 header{height:62px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #202923;position:sticky;top:0;background:#0b100e;z-index:3}
 .brand{font-weight:900;letter-spacing:2px}.brand b{color:var(--lime)}.status{font-size:10px;letter-spacing:1px;color:var(--lime);background:#253127;padding:7px 11px;border-radius:30px}
@@ -21,11 +26,12 @@ input,select{width:100%;background:#0e1511;border:1px solid #354238;border-radiu
 .formrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.formrow.three{grid-template-columns:2fr 1fr auto}.small{font-size:10px;color:var(--muted);line-height:1.5}.member{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #28332c;font-size:12px}.member:last-child{border:0}.member button{border:0;background:transparent;color:#ffaaaa;font-size:17px}
 .statrow{margin:14px 0}.statlabels{display:flex;justify-content:space-between;font-size:12px;gap:8px}.statlabels span:nth-child(2){color:#aeb8b1;text-align:center}.statbar{display:flex;height:4px;border-radius:5px;overflow:hidden;margin-top:8px;background:#29332d}.statbar span:first-child{background:var(--lime)}.statbar span:last-child{background:var(--blue)}
 .event{display:flex;gap:10px;align-items:center;font-size:12px;font-weight:650}.dot{width:7px;height:7px;background:var(--lime);border-radius:50%;flex:none}.event small{color:var(--muted);margin-left:auto;white-space:nowrap}
+.settings-btn{border:1px solid var(--line);background:var(--panel);color:#fff;border-radius:10px;padding:8px 10px;font-size:18px}.settings-panel{display:none;position:absolute;right:12px;top:58px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;width:220px;z-index:8;box-shadow:0 12px 30px #0008}.settings-panel.open{display:block}.settings-panel label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.team-select{max-width:100%;margin-bottom:10px}
 .install{display:none;background:var(--lime);color:#111;padding:10px 12px;border:0;border-radius:12px;font-weight:900}
 .commentary{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px}.commentary strong{color:var(--lime)}.modal-backdrop{position:fixed;inset:0;background:#000b;z-index:20;display:grid;place-items:center;padding:20px}.modal{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}.modal h3{margin:0 0 8px}.modal label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px}.modal-actions{display:flex;gap:8px;margin-top:16px}.modal-actions button{flex:1}footer{text-align:center;color:#68756c;font-size:10px;padding:14px}.hidden{display:none!important}
 @media(max-width:420px){.tab{font-size:9px;padding:12px 2px}.goals{font-size:33px}.formrow.three{grid-template-columns:1fr 68px auto}}
 </style></head><body>
-<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><span class="status" id="matchStatus">NOT STARTED</span></header>
+<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>FOOTBALL THEME</label><select id="themeSelect"><option value="default">Matchday Classic</option><option value="fifa">FIFA</option><option value="epl">Premier League</option><option value="laliga">LaLiga</option><option value="bundesliga">Bundesliga</option><option value="ucl">Champions League</option></select><p class="small">Choose a broadcast-inspired colour theme.</p><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button></div></header>
 <main>
 <section class="score">
  <div class="live" id="liveLabel">MATCH CENTRE</div>
@@ -35,16 +41,16 @@ input,select{width:100%;background:#0e1511;border:1px solid #354238;border-radiu
   <div><div class="flag" id="awayFlag">🏳️</div><div class="teamname" id="awayName">AWAY TEAM</div></div>
  </div>
 </section>
-<nav class="tabs"><button class="tab active" data-tab="match">SCORER</button><button class="tab" data-tab="teams">TEAMS</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button></nav>
+<nav class="tabs"><button class="tab active" data-tab="teams">TEAMS / NEW MATCH</button><button class="tab" data-tab="match">SCORER</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button></nav>
 <section id="matchPanel">
  <div class="section-title">MATCH CONTROL</div>
  <div class="controls"><button class="btn green" id="startBtn">▶ START MATCH</button><button class="btn" id="halfBtn">Ⅱ HALF TIME</button><button class="btn" id="finishBtn">■ FINISH</button></div>
- <div class="section-title">RECORD MATCH EVENTS · SELECT THE TEAM</div><div id="actionGroups"></div>
+ <div class="section-title">RECORD MATCH EVENTS</div><select class="team-select" id="eventTeamSelect" aria-label="Select team"><option value="0">HOME TEAM</option><option value="1">AWAY TEAM</option></select><div class="group"><div class="actions" id="eventActions"></div></div>
  <div class="controls"><button class="btn" id="undoBtn">↶ UNDO LAST EVENT</button><button class="btn danger" id="resetBtn">RESET MATCH</button></div>
  <p class="small">The match clock runs only while the match is started. Events are time-stamped and saved on this device.</p>
 </section>
 <section id="teamsPanel" hidden>
- <div class="section-title">TEAM SETUP</div><div id="teamEditors"></div>
+ <div class="section-title">NEW MATCH · TEAM SETUP</div><div id="teamEditors"></div><div class="controls"><button class="btn green" id="newMatchBtn">＋ NEW MATCH</button><button class="btn danger" id="endResetBtn">■ END & RESET</button></div><p class="small">Set both teams and squads before starting a new match. New Match clears the previous score, timer and events while keeping team names and squads.</p>
 </section>
 <section id="statsPanel" hidden><div class="section-title">LIVE MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
 <section id="eventsPanel" hidden><div class="section-title">MATCH EVENT TIMELINE</div><div id="eventList"></div></section><section id="commentaryPanel" hidden><div class="section-title">LIVE MATCH COMMENTARY</div><div id="commentaryList"></div></section>
@@ -55,14 +61,14 @@ const flags=['🇮🇳','🇬🇧','🇧🇷','🇦🇷','🇫🇷','🇩🇪','
 const blankStats=()=>({goals:0,shots:0,target:0,corners:0,fouls:0,yellow:0,red:0,offsides:0,saves:0});
 const fresh=()=>({teams:[{name:'HOME TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]},{name:'AWAY TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]}],stats:[blankStats(),blankStats()],seconds:0,running:false,started:false,finished:false,half:1,events:[]});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{state=fresh()}
-const labels={goal:'Goal',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
+const labels={goal:'Goal',pass:'Pass',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
 const statKeys={goal:'goals',target:'target',shot:'shots',corner:'corners',foul:'fouls',yellow:'yellow',red:'red',offside:'offsides',save:'saves'};
 const actions=[['⚽ Goal','goal'],['↗ Pass','pass'],['🎯 Shot on target','target'],['↗ Shot','shot'],['🚩 Corner','corner'],['✋ Foul','foul'],['🟨 Yellow card','yellow'],['🟥 Red card','red'],['⤴ Offside','offside'],['🧤 Save','save']];
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 function time(){return String(Math.floor(state.seconds/60)).padStart(2,'0')+':'+String(state.seconds%60).padStart(2,'0')}
 function matchMinute(){return Math.floor(state.seconds/60)+1}
 function render(){
- document.querySelector('#homeName').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#awayName').textContent=state.teams[1].name||'AWAY TEAM';document.querySelector('#actionTeam0').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#actionTeam1').textContent=state.teams[1].name||'AWAY TEAM';
+ document.querySelector('#homeName').textContent=state.teams[0].name||'HOME TEAM';document.querySelector('#awayName').textContent=state.teams[1].name||'AWAY TEAM';document.querySelector('#eventTeamSelect').options[0].text=state.teams[0].name||'HOME TEAM';document.querySelector('#eventTeamSelect').options[1].text=state.teams[1].name||'AWAY TEAM';
  document.querySelector('#homeFlag').textContent=state.teams[0].flag;document.querySelector('#awayFlag').textContent=state.teams[1].flag;
  document.querySelector('#homeGoals').textContent=state.stats[0].goals;document.querySelector('#awayGoals').textContent=state.stats[1].goals;
  document.querySelector('#clock').textContent=time();document.querySelector('#halfLabel').textContent=state.finished?'FULL TIME':state.half===1?'FIRST HALF':'SECOND HALF';
@@ -98,17 +104,21 @@ function renderTeams(){
  document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{let i=+b.dataset.add,el=document.querySelector('#newMember'+i),name=el.value.trim();if(!name)return;let no=document.querySelector('#shirt'+i).value;state.teams[i].members.push((no?'#'+no+' ':'')+name);render()});
  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{let [i,j]=b.dataset.remove.split(':').map(Number);state.teams[i].members.splice(j,1);render()});
 }
-document.querySelector('#actionGroups').innerHTML=[0,1].map(i=>'<div class="group"><h3 id="actionTeam'+i+'">'+(i===0?'HOME TEAM':'AWAY TEAM')+'</h3><div class="actions">'+actions.map(([label,key])=>'<button class="action '+(key==='goal'?'goal':'')+'" data-team="'+i+'" data-key="'+key+'">'+label+'</button>').join('')+'</div></div>').join('');
-document.querySelectorAll('.action').forEach(b=>b.onclick=()=>record(+b.dataset.team,b.dataset.key));
+document.querySelector('#eventActions').innerHTML=actions.map(([label,key])=>'<button class="action '+(key==='goal'?'goal':'')+'" data-key="'+key+'">'+label+'</button>').join('');document.querySelectorAll('#eventActions .action').forEach(b=>b.onclick=()=>record(+document.querySelector('#eventTeamSelect').value,b.dataset.key));
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['match','teams','stats','events','commentary'].forEach(t=>document.getElementById(t+'Panel').hidden=t!==b.dataset.tab)});
 document.querySelector('#startBtn').onclick=()=>{if(state.finished)return;state.started=true;state.running=!state.running;render()};
 document.querySelector('#halfBtn').onclick=()=>{if(!state.started||state.finished)return;state.running=false;state.half=state.half===1?2:1;state.events.push({team:'MATCH',label:state.half===2?'Half time · Second half started':'Second half ended',minute:matchMinute(),clock:time()});render()};
 document.querySelector('#finishBtn').onclick=()=>{if(!state.started||state.finished)return;state.running=false;state.finished=true;state.events.push({team:'MATCH',label:'Full time',minute:matchMinute(),clock:time()});render()};
 document.querySelector('#undoBtn').onclick=()=>{let e=state.events.pop();if(!e){alert('No event to undo.');return}if(e.changes)e.changes.forEach(k=>state.stats[e.teamIndex][k]=Math.max(0,state.stats[e.teamIndex][k]-1));render()};
-document.querySelector('#resetBtn').onclick=()=>{if(!confirm('Reset the score, timer and event timeline? Team names and squads will be kept.'))return;let teams=state.teams;state=fresh();state.teams=teams;render()};
+function resetMatch(ask=true){if(ask&&!confirm('End and reset this match? The score, timer and event timeline will be cleared. Team names and squads will be kept.'))return;let teams=state.teams;state=fresh();state.teams=teams;render();document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab==='teams'));['match','teams','stats','events','commentary'].forEach(t=>document.getElementById(t+'Panel').hidden=t!=='teams')}
+document.querySelector('#resetBtn').onclick=()=>resetMatch(true);document.querySelector('#newMatchBtn').onclick=()=>resetMatch(true);document.querySelector('#endResetBtn').onclick=()=>resetMatch(true);
 setInterval(()=>{if(state.running&&!state.finished){state.seconds++;render()}},1000);
 let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;document.querySelector('#installBtn').style.display='block'});
 document.querySelector('#installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;document.querySelector('#installBtn').style.display='none'}};
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+document.querySelector('#settingsBtn').onclick=()=>document.querySelector('#settingsPanel').classList.toggle('open');
+document.querySelector('#themeSelect').onchange=e=>{document.body.dataset.theme=e.target.value==='default'?'':e.target.value;localStorage.setItem('matchday-theme',e.target.value)};
+document.body.dataset.theme=localStorage.getItem('matchday-theme')||'';
+document.querySelector('#shareViewerBtn').onclick=async()=>{const url=location.origin+location.pathname+'?view=1';try{if(navigator.share)await navigator.share({title:'Matchday Football Live Viewer',url});else{await navigator.clipboard.writeText(url);alert('Viewer link copied. Note: live shared viewing requires the real-time viewer service, which is not connected yet.')}}catch(e){}};
 render();
 </script></body></html>
