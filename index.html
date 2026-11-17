@@ -287,6 +287,7 @@ syncAudioToggles();
 
 document.querySelector('#shareViewerBtn').onclick=async()=>{try{if(!roomId||!writerToken){const r=await fetch(LIVE_API+'/create',{method:'POST'});if(!r.ok)throw new Error('Could not create a live room');const d=await r.json();roomId=d.room;writerToken=d.token;localStorage.setItem('matchday-room',roomId);localStorage.setItem('matchday-room-token',writerToken)}await fetch(LIVE_API+'/room/'+encodeURIComponent(roomId)+'?token='+encodeURIComponent(writerToken),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});lastRemoteState=JSON.stringify(state);connectLiveSocket();const link=location.origin+location.pathname+'?room='+encodeURIComponent(roomId)+'&view=1';if(navigator.share){try{await navigator.share({title:'Matchday Live Match',text:'Join and follow this live football match:',url:link})}catch(e){if(e.name!=='AbortError')throw e}}else if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(link);alert('Match invite link copied!')}else prompt('Copy this match invite link:',link);}catch(e){alert('Could not create the viewer link. Check your connection and try again.')}};
 const viewerId=localStorage.getItem('matchday-viewer-id')||(crypto.randomUUID?crypto.randomUUID():'viewer-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem('matchday-viewer-id',viewerId);let lastSpokenEventCount=0;let viewerFetchBusy=false;
+let liveSocket=null,liveSocketRetry=null;
 render();
 syncAudioToggles();setupViewerMode();
 if(roomId&&(viewerMode||writerToken))connectLiveSocket();
@@ -296,7 +297,6 @@ if(viewerMode){
  setInterval(()=>{if(!liveSocket||liveSocket.readyState!==WebSocket.OPEN)refreshViewerCount()},5000);
  refreshViewerCount();
 }
-let liveSocket=null,liveSocketRetry=null;
 function connectLiveSocket(){
  if(!roomId||!window.WebSocket)return;
  if(liveSocket&&(liveSocket.readyState===WebSocket.OPEN||liveSocket.readyState===WebSocket.CONNECTING))return;
