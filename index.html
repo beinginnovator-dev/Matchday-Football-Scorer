@@ -563,4 +563,78 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  const oldApply=applyRemoteState;
  applyRemoteState=function(remote){if(!remote)return;const prev=lastRemoteState;oldApply(remote);if(!viewerMode||!prev)return;let oldCount=0;try{oldCount=(JSON.parse(prev).events||[]).length}catch(e){};(state.events||[]).slice(oldCount).forEach(ev=>{if(ev.key==='start'||ev.key==='halftime'||ev.key==='fulltime')showFloatingSponsor(ev.key)})};
 })();
+
+/* Scorer header invite button + independent sponsor and floating-ad destination links */
+(function(){
+ const topShare=document.querySelector('#shareViewerTop'),shareAction=document.querySelector('#shareViewerBtn');
+ if(topShare){
+   topShare.style.display='inline-flex';
+   topShare.setAttribute('aria-label','Share viewer link');
+   topShare.title='Share viewer link';
+   topShare.innerHTML='↗';
+   topShare.onclick=()=>shareAction&&shareAction.click();
+ }
+ const oldRenderAdvertising=renderAdvertising;
+ renderAdvertising=function(){
+   oldRenderAdvertising();
+   const editor=document.querySelector('#advertisingEditor');
+   if(!editor)return;
+   const addLogo=document.querySelector('#newSponsorLogo');
+   if(addLogo){
+     const row=document.createElement('div');row.className='formrow sponsor-links-new';
+     row.innerHTML='<input id="newSponsorUrl" type="url" placeholder="Sponsor name link (website URL)"><input id="newSponsorAdUrl" type="url" placeholder="Floating advertisement link (URL)">';
+     addLogo.closest('.formrow').after(row);
+   }
+   (state.matchMeta.sponsors||[]).forEach((s,i)=>{
+     const logo=document.querySelector('[data-sponsor-logo="'+i+'"]');
+     if(!logo)return;
+     const row=document.createElement('div');row.className='formrow sponsor-links-edit';
+     row.innerHTML='<input type="url" data-sponsor-url="'+i+'" value="'+esc(s.sponsorUrl||'')+'" placeholder="Sponsor name link (website URL)"><input type="url" data-sponsor-ad-url="'+i+'" value="'+esc(s.adUrl||'')+'" placeholder="Floating advertisement link (URL)">';
+     logo.closest('.formrow').after(row);
+   });
+   const add=document.querySelector('#addSponsorBtn');
+   if(add)add.onclick=()=>{
+     const name=document.querySelector('#newSponsorName').value.trim(),logo=document.querySelector('#newSponsorLogo').value.trim(),animation=document.querySelector('#newSponsorAnimation').value,sponsorUrl=document.querySelector('#newSponsorUrl').value.trim(),adUrl=document.querySelector('#newSponsorAdUrl').value.trim();
+     if(!name){alert('Enter a sponsor name.');return}
+     if(state.matchMeta.sponsors.length>=10){alert('Maximum 10 sponsors allowed.');return}
+     state.matchMeta.sponsors.push({name,logo,animation,sponsorUrl,adUrl});syncPrimarySponsor();render();setTeamsSubtab('advertising');
+   };
+   document.querySelectorAll('[data-save-sponsor]').forEach(btn=>btn.onclick=()=>{
+     const i=+btn.dataset.saveSponsor,s=state.matchMeta.sponsors[i];
+     s.name=document.querySelector('[data-sponsor-name="'+i+'"]').value.trim()||s.name;
+     s.logo=document.querySelector('[data-sponsor-logo="'+i+'"]').value.trim();
+     s.animation=document.querySelector('[data-sponsor-animation="'+i+'"]').value;
+     s.sponsorUrl=document.querySelector('[data-sponsor-url="'+i+'"]').value.trim();
+     s.adUrl=document.querySelector('[data-sponsor-ad-url="'+i+'"]').value.trim();
+     syncPrimarySponsor();render();setTeamsSubtab('advertising');
+   });
+ };
+ const oldRenderSponsorBanner=renderSponsorBanner;
+ renderSponsorBanner=function(){
+   oldRenderSponsorBanner();
+   const row=document.querySelector('.sponsor-brand-row'),name=document.querySelector('#metaSponsor');
+   if(!row||!name)return;
+   row.querySelectorAll('.sponsor-name-link').forEach(a=>a.remove());
+   const sponsor=(state.matchMeta.sponsors||[])[0]||{};
+   if(sponsor.sponsorUrl){
+     const a=document.createElement('a');a.className='sponsor-name-link';a.href=sponsor.sponsorUrl;a.target='_blank';a.rel='noopener noreferrer';a.title='Visit sponsor website';a.setAttribute('aria-label','Open sponsor website');a.textContent='↗';row.append(a);
+   }
+ };
+ showFloatingSponsor=function(eventKey){
+   if(!viewerMode||!eventKey)return;
+   const triggers=state.matchMeta.adTriggers||{};
+   if(!triggers[eventKey])return;
+   const sponsors=state.matchMeta.sponsors||[];
+   if(!sponsors.length)return;
+   window.matchdaySponsorIndex=((window.matchdaySponsorIndex||0)+1)%sponsors.length;
+   const s=sponsors[window.matchdaySponsorIndex],el=document.querySelector('#sponsorFloat');
+   if(!el)return;
+   const content=(s.logo?'<img src="'+esc(s.logo)+'" alt="">':'')+'<span>'+esc(s.name)+'</span><small>SPONSORED</small>';
+   el.innerHTML=s.adUrl?'<a class="floating-ad-link" href="'+esc(s.adUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="Open advertisement">'+content+' <b>↗</b></a>':content;
+   el.className='sponsor-float';el.style.pointerEvents=s.adUrl?'auto':'none';
+   void el.offsetWidth;clearTimeout(window.matchdaySponsorFloatTimer);
+   window.matchdaySponsorFloatTimer=setTimeout(()=>el.classList.add('hidden'),5000);
+ };
+ renderSponsorBanner();
+})();
 </script></body></html>
