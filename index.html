@@ -273,6 +273,15 @@ body[data-skin="pro"] .score .result-banner{background:linear-gradient(100deg,#c
 body.viewer-mode #shareViewerTop{display:inline-block!important}
 @media(max-width:420px){.subtab{font-size:10px;padding:10px 4px}.sponsor-float{font-size:12px;padding:8px 10px}.sponsor-float img{width:24px;height:24px}}
 
+
+/* Force a unified tab palette over legacy per-tab colour rules */
+body[data-skin="whiteblue"] .tabs .tab:nth-child(n){background:#dceaff!important;color:#294361!important;border-color:#c9dcf5!important}
+body[data-skin="whiteblue"] .tabs .tab.active:nth-child(n){background:#1769c2!important;color:#fff!important;border-color:#1769c2!important}
+body[data-skin="redblack"] .tabs .tab:nth-child(n){background:#fff!important;color:#4a3030!important;border-color:#e3c9c9!important}
+body[data-skin="redblack"] .tabs .tab.active:nth-child(n){background:#c51f32!important;color:#fff!important;border-color:#c51f32!important}
+body[data-skin="pro"] .tabs .tab:nth-child(n){background:#142238!important;color:#c8d7e8!important;border-color:#2d4564!important}
+body[data-skin="pro"] .tabs .tab.active:nth-child(n){background:#36a3ff!important;color:#041526!important;border-color:#36a3ff!important}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
