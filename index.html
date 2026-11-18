@@ -320,7 +320,7 @@ body[data-skin="red"] .subtab.active{background:#c51f32!important;color:#fff!imp
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
-<nav class="tabs"><button class="tab active" data-tab="teams">MATCHES</button><button class="tab" data-tab="match">MATCH</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button><button class="tab" data-tab="history">HISTORY</button></nav>
+<nav class="tabs"><button class="tab active" data-tab="teams">MATCHES</button><button class="tab" data-tab="match">SCOREBOARD</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button><button class="tab" data-tab="history">HISTORY</button></nav>
 <section class="score" id="scoreCard">
  <div class="confetti-layer" id="goalConfetti"></div>
  <div class="result-banner" id="resultBanner"><div class="confetti-layer" id="resultConfetti"></div><strong id="resultTitle">FULL TIME</strong><span id="resultSubtitle"></span></div>
@@ -360,10 +360,10 @@ let remotePushQueued=false;
 
 const flags=['🇮🇳','🇬🇧','🇧🇷','🇦🇷','🇫🇷','🇩🇪','🇪🇸','🇮🇹','🇵🇹','🇳🇱','🇯🇵','🇺🇸','🇲🇽','🇳🇬','🇿🇦','🇦🇺'];
 const blankStats=()=>({goals:0,shots:0,target:0,corners:0,fouls:0,yellow:0,red:0,offsides:0,saves:0});
-const fresh=()=>{const teams=[{id:'team-'+Date.now()+'-0',name:'HOME TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]},{id:'team-'+Date.now()+'-1',name:'AWAY TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]}];return{teams:teams.map(({id,...t})=>({...t})),teamLibrary:teams,selectedTeamIds:teams.map(t=>t.id),matchMeta:{matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow'},stats:[blankStats(),blankStats()],seconds:0,running:false,started:false,finished:false,half:1,events:[]}};
+const fresh=()=>{const teams=[{id:'team-'+Date.now()+'-0',name:'HOME TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]},{id:'team-'+Date.now()+'-1',name:'AWAY TEAM',flag:flags[Math.floor(Math.random()*flags.length)],members:[]}];return{teams:teams.map(({id,...t})=>({...t})),teamLibrary:teams,selectedTeamIds:teams.map(t=>t.id),matchMeta:{matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',leagueName:'',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow'},stats:[blankStats(),blankStats()],seconds:0,running:false,started:false,finished:false,half:1,events:[]}};
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{state=fresh()}
 if(!Array.isArray(state.teamLibrary)){state.teamLibrary=state.teams.map((t,i)=>({...t,id:'legacy-'+i+'-'+Date.now(),members:[...(t.members||[])]}));state.selectedTeamIds=state.teamLibrary.map(t=>t.id)}
-if(!Array.isArray(state.selectedTeamIds)||state.selectedTeamIds.length!==2)state.selectedTeamIds=state.teamLibrary.slice(0,2).map(t=>t.id);if(!state.matchMeta)state.matchMeta={matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow'};else state.matchMeta={matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow',...state.matchMeta};
+if(!Array.isArray(state.selectedTeamIds)||state.selectedTeamIds.length!==2)state.selectedTeamIds=state.teamLibrary.slice(0,2).map(t=>t.id);if(!state.matchMeta)state.matchMeta={matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow'};else state.matchMeta={matchName:'MATCHDAY FIXTURE',venue:'VENUE TBC',leagueName:'',matchType:'FRIENDLY',sponsorName:'',sponsorLogo:'',sponsorAnimation:'glow',...state.matchMeta};
 state.teamLibrary.forEach(t=>{if(!Array.isArray(t.members))t.members=[]});if(!Array.isArray(state.matchMeta.sponsors)){state.matchMeta.sponsors=state.matchMeta.sponsorName?[{name:state.matchMeta.sponsorName,logo:state.matchMeta.sponsorLogo||'',animation:state.matchMeta.sponsorAnimation||'glow'}]:[];}state.matchMeta.sponsors=state.matchMeta.sponsors.slice(0,10);
 const labels={goal:'Goal',pass:'Pass',target:'Shot on target',shot:'Shot',corner:'Corner',foul:'Foul',yellow:'Yellow card',red:'Red card',offside:'Offside',save:'Save'};
 const statKeys={goal:'goals',target:'target',shot:'shots',corner:'corners',foul:'fouls',yellow:'yellow',red:'red',offside:'offsides',save:'saves'};
@@ -392,7 +392,7 @@ function render(){
  const rb=document.querySelector('#resultBanner');rb.classList.toggle('show',!!state.finished);document.querySelector('#scoreCard').classList.toggle('has-result',!!state.finished);if(state.finished){const a=state.stats[0].goals,b=state.stats[1].goals;document.querySelector('#resultTitle').textContent=a===b?'FULL TIME · DRAW':a>b?state.teams[0].name+' WIN!':state.teams[1].name+' WIN!';document.querySelector('#resultSubtitle').textContent='Full-time result · '+state.teams[0].name+' '+a+' – '+b+' '+state.teams[1].name;}
  document.querySelector('#homeGoals').textContent=state.stats[0].goals;document.querySelector('#awayGoals').textContent=state.stats[1].goals;
  document.querySelector('#clock').textContent=time();document.querySelector('#halfLabel').textContent=state.finished?'FULL TIME':state.half===1?'FIRST HALF':'SECOND HALF';
- document.querySelector('#liveLabel').textContent=state.finished?'■ RESULT':state.running?'● LIVE MATCH':state.started?'Ⅱ MATCH PAUSED':'MATCH CENTRE';const meta=state.matchMeta||{};document.querySelector('#metaDetails').textContent=[meta.matchType||'FRIENDLY',meta.venue||'VENUE TBC'].join(' · ');renderSponsorBanner();
+ document.querySelector('#liveLabel').textContent=state.finished?'■ RESULT':state.running?'● LIVE MATCH':state.started?'Ⅱ MATCH PAUSED':'MATCH CENTRE';const meta=state.matchMeta||{};document.querySelector('#metaDetails').textContent=[meta.leagueName,meta.matchType||'FRIENDLY',meta.venue||'VENUE TBC'].filter(Boolean).join(' · ');renderSponsorBanner();
  document.querySelector('#matchStatus').textContent=state.running?'LIVE':state.started?'PAUSED':'READY';
  document.querySelector('#startBtn').textContent=state.finished?'MATCH FINISHED':state.running?'Ⅱ PAUSE':'▶ '+(state.started?'RESUME MATCH':'START MATCH');
  document.querySelector('#startBtn').disabled=state.finished;document.querySelector('#halfBtn').disabled=!state.started||state.finished;
@@ -637,4 +637,105 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  };
  renderSponsorBanner();
 })();
+
+/* Matchday requested fixes: league field, reliable touch-safe advertiser editor,
+   separate floating-ad inventory, and rotating sponsor presentation. */
+(function(){
+ const $=s=>document.querySelector(s);
+ const escHtml=v=>esc(String(v==null?'':v));
+ const eventOptions=[['goal','Goal'],['yellow','Yellow card'],['red','Red card'],['start','Match starts'],['halftime','Half-time'],['fulltime','Full-time'],['corner','Corner'],['shot','Shot'],['save','Save'],['pass','Pass'],['foul','Foul'],['offside','Offside'],['target','Shot on target']];
+ state.matchMeta=state.matchMeta||{};
+ state.matchMeta.leagueName=state.matchMeta.leagueName||'';
+ state.matchMeta.floatingAds=Array.isArray(state.matchMeta.floatingAds)?state.matchMeta.floatingAds.slice(0,10):[];
+ state.matchMeta.adTriggers=Object.assign({goal:true,yellow:true,red:true,start:true,halftime:true,fulltime:true},state.matchMeta.adTriggers||{});
+ const oldRenderTeams=renderTeams;
+ renderTeams=function(){
+   oldRenderTeams();
+   const card=$('#teamEditors .teamcard');
+   if(!card||$('#leagueNameInput'))return;
+   const row=document.createElement('div');row.className='formrow';
+   row.innerHTML='<input id="leagueNameInput" placeholder="League / tournament name" value="'+escHtml(state.matchMeta.leagueName)+'">';
+   const venue=$('#venueInput'); if(venue&&venue.parentElement)venue.parentElement.after(row);else card.append(row);
+   const saveMeta=$('#saveMatchMeta');
+   if(saveMeta)saveMeta.onclick=()=>{
+     state.matchMeta={...state.matchMeta,matchName:$('#matchNameInput').value.trim()||'MATCHDAY FIXTURE',
+       venue:$('#venueInput').value.trim()||'VENUE TBC',leagueName:$('#leagueNameInput').value.trim(),
+       matchType:$('#matchTypeInput').value};
+     save();render();
+   };
+ };
+ const oldRender=render;
+ render=function(){oldRender();const m=state.matchMeta||{};const d=$('#metaDetails');if(d)d.textContent=[m.leagueName,m.matchType||'FRIENDLY',m.venue||'VENUE TBC'].filter(Boolean).join(' · ');};
+ function urlSafe(v){try{const u=new URL(v);return ['http:','https:'].includes(u.protocol)?u.href:''}catch(e){return ''}}
+ function selectEvent(value){return eventOptions.map(([k,n])=>'<option value="'+k+'" '+(value===k?'selected':'')+'>'+n+'</option>').join('')}
+ function renderAdvertising(){
+   const el=$('#advertisingEditor');if(!el)return;
+   const sponsors=state.matchMeta.sponsors||(state.matchMeta.sponsors=[]);
+   const ads=state.matchMeta.floatingAds||(state.matchMeta.floatingAds=[]);
+   el.innerHTML=
+    '<div class="teamcard"><h3>SPONSOR NAME · '+sponsors.length+'/10</h3><p class="small">Sponsor name and logo shown in the scoreboard header. Each sponsor has its own website link and visual effect. Sponsors rotate automatically.</p>'+
+    '<div class="formrow"><input id="newSponsorName" placeholder="Company / sponsor name"><input id="newSponsorLogo" placeholder="Sponsor logo image URL"></div>'+
+    '<div class="formrow"><input id="newSponsorUrl" type="url" placeholder="Sponsor website URL"><select id="newSponsorAnimation"><option value="glow">Glow</option><option value="breathe">Breathe</option><option value="shine">Shine</option><option value="pulse">Pulse</option><option value="none">No animation</option></select></div>'+
+    '<button type="button" class="btn green" id="addSponsorBtn" '+(sponsors.length>=10?'disabled':'')+'>＋ ADD SPONSOR</button></div>'+
+    sponsors.map((x,i)=>'<div class="teamcard"><div class="sponsor-edit-head"><strong>SPONSOR '+(i+1)+' / 10</strong><button type="button" class="btn danger" data-remove-sponsor="'+i+'">REMOVE</button></div>'+
+    '<div class="formrow"><input data-sponsor-name="'+i+'" value="'+escHtml(x.name)+'" placeholder="Sponsor name"><input data-sponsor-logo="'+i+'" value="'+escHtml(x.logo)+'" placeholder="Logo image URL"></div>'+
+    '<div class="formrow"><input type="url" data-sponsor-url="'+i+'" value="'+escHtml(x.sponsorUrl||'')+'" placeholder="Sponsor website URL"><select data-sponsor-animation="'+i+'"><option value="glow">Glow</option><option value="breathe">Breathe</option><option value="shine">Shine</option><option value="pulse">Pulse</option><option value="none">No animation</option></select></div>'+
+    '<button type="button" class="btn green" data-save-sponsor="'+i+'">SAVE SPONSOR</button></div>').join('')+
+    '<div class="teamcard"><h3>FLOATING ADVERTISEMENT · '+ads.length+'/10</h3><p class="small">Create up to 10 separate floating advertisements. Each can have an image, company message, display size and event trigger. They appear below the scoreboard on viewer pages when the selected event occurs.</p>'+
+    '<div class="formrow"><input id="newFloatImage" placeholder="Advertisement image URL"><input id="newFloatMessage" placeholder="Advertising company / message"></div>'+
+    '<div class="formrow"><select id="newFloatSize"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select><select id="newFloatEvent">'+selectEvent('goal')+'</select></div>'+
+    '<div class="formrow"><input id="newFloatUrl" type="url" placeholder="Advertisement destination URL (optional)"><button type="button" class="btn green" id="addFloatAd" '+(ads.length>=10?'disabled':'')+'>＋ ADD FLOATING AD</button></div></div>'+
+    ads.map((a,i)=>'<div class="teamcard"><div class="sponsor-edit-head"><strong>FLOATING AD '+(i+1)+' / 10</strong><button type="button" class="btn danger" data-remove-float="'+i+'">REMOVE</button></div>'+
+    '<div class="formrow"><input data-float-image="'+i+'" value="'+escHtml(a.image||'')+'" placeholder="Advertisement image URL"><input data-float-message="'+i+'" value="'+escHtml(a.message||'')+'" placeholder="Company / advertising message"></div>'+
+    '<div class="formrow"><select data-float-size="'+i+'"><option value="small">Small</option><option value="medium">Medium</option><option value="large">Large</option></select><select data-float-event="'+i+'">'+selectEvent(a.event||'goal')+'</select></div>'+
+    '<div class="formrow"><input type="url" data-float-url="'+i+'" value="'+escHtml(a.url||'')+'" placeholder="Advertisement destination URL (optional)"><button type="button" class="btn green" data-save-float="'+i+'">SAVE ADVERTISEMENT</button></div></div>').join('')+
+    '<div class="teamcard"><h3>EVENT TRIGGERS</h3><p class="small">Select which match events are allowed to show a floating advertisement. The ad must also be assigned to that event above.</p><div class="sponsor-controls">'+eventOptions.map(([k,n])=>'<label><input type="checkbox" data-ad-trigger="'+k+'" '+(state.matchMeta.adTriggers[k]?'checked':'')+'> '+n+'</label>').join('')+'</div><button type="button" class="btn green" id="saveAdTriggers">SAVE EVENT SETTINGS</button></div>';
+   sponsors.forEach((x,i)=>{const q=$('[data-sponsor-animation="'+i+'"]');if(q)q.value=x.animation||'glow'});
+   ads.forEach((x,i)=>{const q=$('[data-float-size="'+i+'"]');if(q)q.value=x.size||'medium'});
+   // Explicit click handlers avoid nested wrapper handlers being overwritten on mobile rerenders.
+   $('#addSponsorBtn')?.addEventListener('click',()=>{const name=$('#newSponsorName').value.trim();if(!name){alert('Enter a sponsor name.');return}if(sponsors.length>=10)return;sponsors.push({name,logo:$('#newSponsorLogo').value.trim(),sponsorUrl:urlSafe($('#newSponsorUrl').value.trim()),animation:$('#newSponsorAnimation').value});syncPrimarySponsor();save();renderAdvertising();renderSponsorBanner()});
+   el.querySelectorAll('[data-save-sponsor]').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.saveSponsor,x=sponsors[i];if(!x)return;x.name=$('[data-sponsor-name="'+i+'"]').value.trim()||x.name;x.logo=$('[data-sponsor-logo="'+i+'"]').value.trim();x.sponsorUrl=urlSafe($('[data-sponsor-url="'+i+'"]').value.trim());x.animation=$('[data-sponsor-animation="'+i+'"]').value;syncPrimarySponsor();save();renderAdvertising();renderSponsorBanner()}));
+   el.querySelectorAll('[data-remove-sponsor]').forEach(b=>b.addEventListener('click',()=>{sponsors.splice(+b.dataset.removeSponsor,1);syncPrimarySponsor();save();renderAdvertising();renderSponsorBanner()}));
+   $('#addFloatAd')?.addEventListener('click',()=>{const message=$('#newFloatMessage').value.trim();if(!message&&!$('#newFloatImage').value.trim()){alert('Add an advertisement image or message.');return}if(ads.length>=10)return;ads.push({image:$('#newFloatImage').value.trim(),message,size:$('#newFloatSize').value,event:$('#newFloatEvent').value,url:urlSafe($('#newFloatUrl').value.trim())});save();renderAdvertising()});
+   el.querySelectorAll('[data-save-float]').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.saveFloat,a=ads[i];if(!a)return;a.image=$('[data-float-image="'+i+'"]').value.trim();a.message=$('[data-float-message="'+i+'"]').value.trim();a.size=$('[data-float-size="'+i+'"]').value;a.event=$('[data-float-event="'+i+'"]').value;a.url=urlSafe($('[data-float-url="'+i+'"]').value.trim());save();renderAdvertising()}));
+   el.querySelectorAll('[data-remove-float]').forEach(b=>b.addEventListener('click',()=>{ads.splice(+b.dataset.removeFloat,1);save();renderAdvertising()}));
+   $('#saveAdTriggers')?.addEventListener('click',()=>{eventOptions.forEach(([k])=>state.matchMeta.adTriggers[k]=!!$('[data-ad-trigger="'+k+'"]')?.checked);save();alert('Floating advertisement event settings saved.')});
+ }
+ window.renderAdvertising=renderAdvertising;
+ const priorRenderSponsorBanner=renderSponsorBanner;
+ renderSponsorBanner=function(){
+   const sponsors=state.matchMeta.sponsors||[];
+   const s=sponsors.length?sponsors[(window.matchdaySponsorIndex||0)%sponsors.length]:{name:state.matchMeta.sponsorName||'',logo:state.matchMeta.sponsorLogo||'',animation:state.matchMeta.sponsorAnimation||'glow'};
+   const name=$('#metaSponsor'),presented=$('#metaPresented'),banner=$('#matchMetaBanner'),logo=$('#sponsorLogoDisplay');
+   if(name)name.textContent=s.name||'SPONSOR NAME';if(presented)presented.textContent=s.name?'PRESENTED BY':'SPONSOR NOT SET';
+   if(banner)banner.className='match-meta anim-'+(s.animation||'glow');
+   if(logo){if(s.logo){logo.src=s.logo;logo.style.display='block';logo.onerror=()=>logo.style.display='none'}else{logo.removeAttribute('src');logo.style.display='none'}}
+   const row=$('.sponsor-brand-row');if(row){row.querySelectorAll('.sponsor-name-link').forEach(a=>a.remove());if(s.sponsorUrl){const a=document.createElement('a');a.className='sponsor-name-link';a.href=urlSafe(s.sponsorUrl);a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗';a.style.cssText='display:inline-flex;align-items:center;margin-left:7px;color:var(--lime);font-size:18px;font-weight:900;touch-action:manipulation';row.append(a)}}
+ };
+ cycleSponsors=function(){const n=(state.matchMeta.sponsors||[]).length;if(n>1)window.matchdaySponsorIndex=((window.matchdaySponsorIndex||0)+1)%n;renderSponsorBanner()};
+ // Place the floating ad in its own strip immediately below the scoreboard.
+ const float=$('#sponsorFloat'),score=$('#scoreCard');
+ if(float&&score){float.classList.add('matchday-floating-slot');score.insertAdjacentElement('afterend',float)}
+ showFloatingSponsor=function(eventKey){
+   if(!viewerMode||!eventKey)return;
+   if(!(state.matchMeta.adTriggers||{})[eventKey])return;
+   const ads=state.matchMeta.floatingAds||[];
+   const ad=ads.find(x=>x.event===eventKey);if(!ad)return;
+   const el=$('#sponsorFloat');if(!el)return;
+   const img=ad.image?'<img src="'+escHtml(ad.image)+'" alt="Advertisement">':'';
+   const body=img+'<span class="floating-ad-message">'+escHtml(ad.message||'')+'</span>';
+   el.innerHTML=ad.url?'<a href="'+escHtml(urlSafe(ad.url))+'" target="_blank" rel="noopener noreferrer">'+body+' <b>↗</b></a>':body;
+   el.className='sponsor-float matchday-floating-slot ad-size-'+(ad.size||'medium');
+   el.style.pointerEvents=ad.url?'auto':'none';
+   void el.offsetWidth;clearTimeout(window.matchdaySponsorFloatTimer);
+   window.matchdaySponsorFloatTimer=setTimeout(()=>el.classList.add('hidden'),7000);
+ };
+ // Existing event callbacks call this function; expose for start/half/full-time remote updates too.
+ window.matchdayShowFloatingAd=showFloatingSponsor;
+ const priorApplyRemote=applyRemoteState;
+ applyRemoteState=function(remote){const old=lastRemoteState;priorApplyRemote(remote);if(viewerMode&&old){let count=0;try{count=(JSON.parse(old).events||[]).length}catch(e){};(state.events||[]).slice(count).forEach(ev=>{if(['start','halftime','fulltime'].includes(ev.key))showFloatingSponsor(ev.key)})}};
+ // Render initial header with the first sponsor; cycle through all sponsors thereafter.
+ renderSponsorBanner();
+})();
+
 </script></body></html>
