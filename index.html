@@ -3,7 +3,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f4f6fa"><meta name="description" content="Live football match scorer">
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>Matchday Football Scorer</title>
+<title>MySportzStats-Football</title>
 <style>
 :root{--bg:#080d0b;--panel:#111a15;--panel2:#1b2920;--lime:#c5ff00;--blue:#a5d84b;--muted:#9aa79d;--line:#26352a}
 body[data-theme="fifa"]{--bg:#061b16;--panel:#0d3026;--panel2:#174638;--lime:#b7f34b;--blue:#61d5b0;--line:#235444}
@@ -598,7 +598,7 @@ body[data-skin="whiteblue"] #eventPop,body[data-skin="whiteblue"] .event-pop{col
 @keyframes matchResultBlink{0%,100%{filter:brightness(1);box-shadow:0 0 10px #c5ff0060}50%{filter:brightness(1.28);box-shadow:0 0 25px #c5ff00c0,0 0 42px #c5ff0060}}
 
 </style></head><body class="matches-view">
-<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="red">Red</option><option value="black">Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
+<header><div class="brand">⚽ <b>MySportzStats-Football</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="red">Red</option><option value="black">Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
 <nav class="tabs"><button class="tab active" data-tab="teams">MATCHES</button><button class="tab" data-tab="match">SCOREBOARD</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button><button class="tab" data-tab="history">HISTORY</button></nav>
 <section class="score" id="scoreCard">
@@ -615,9 +615,9 @@ body[data-skin="whiteblue"] #eventPop,body[data-skin="whiteblue"] .event-pop{col
 </section>
 <div class="match-time-strip"><span class="clock" id="clock">00:00</span><span class="half" id="halfLabel">90 MIN MATCH</span></div>
 <section id="matchPanel" hidden>
+ <div class="section-title">RECORD MATCH EVENTS</div><select class="team-select" id="eventTeamSelect" aria-label="Select team"><option value="0">HOME TEAM</option><option value="1">AWAY TEAM</option></select><div class="group"><div class="actions" id="eventActions"></div></div>
  <div class="section-title">MATCH CONTROL</div>
  <div class="controls"><button class="btn green" id="startBtn">▶ START MATCH</button><button class="btn" id="halfBtn">Ⅱ HALF TIME</button><button class="btn" id="finishBtn">■ FINISH</button></div>
- <div class="section-title">RECORD MATCH EVENTS</div><select class="team-select" id="eventTeamSelect" aria-label="Select team"><option value="0">HOME TEAM</option><option value="1">AWAY TEAM</option></select><div class="group"><div class="actions" id="eventActions"></div></div>
  <div class="controls"><button class="btn" id="undoBtn">↶ UNDO LAST EVENT</button><button class="btn danger" id="resetBtn">RESET MATCH</button></div>
  <p class="small">The match clock runs only while the match is started. Events are time-stamped and saved on this device.</p>
 </section>
@@ -627,7 +627,7 @@ body[data-skin="whiteblue"] #eventPop,body[data-skin="whiteblue"] .event-pop{col
 <section id="viewerTeamsPanel" hidden><div class="section-title">TEAM LINE-UPS</div><div id="viewerTeamsContent"></div></section>
 <section id="statsPanel" hidden><div class="section-title">LIVE MATCH STATISTICS</div><div class="statsbox" id="statsContent"></div></section>
 <section id="eventsPanel" hidden><div class="section-title">MATCH EVENT TIMELINE</div><div id="eventList"></div></section><section id="commentaryPanel" hidden><div class="section-title">LIVE MATCH COMMENTARY</div><div id="commentaryList"></div></section><section id="historyPanel" hidden><div class="section-title">MATCH HISTORY · SAVED MATCH BY MATCH</div><div id="historyList"></div></section>
-</main><footer>MATCHDAY FOOTBALL SCORER · MATCH DATA SAVED ON THIS DEVICE</footer>
+</main><footer>MySportzStats-Football · MATCH DATA SAVED ON THIS DEVICE</footer>
 <script>
 const KEY='matchday-live-v2';
 const LIVE_API='https://matchday-live-sync.being-innovator.workers.dev';
