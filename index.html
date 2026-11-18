@@ -536,8 +536,53 @@ body[data-skin="profootball"] #scoreCard{
  #sponsorFloat.matchday-floating-slot>a>img{max-height:380px!important}
 }
 
+
+/* Final theme and event/ad presentation rules */
+body[data-skin="red"]{--skin-accent:#c51f32;--skin-bg:#f4eeee;background:#f4eeee}
+body[data-skin="black"]{--skin-accent:#101010;--skin-bg:#eeeeef;background:#eeeeef}
+body[data-skin="whiteblue"]{--skin-accent:#1769c2}
+body[data-skin="pro"]{--skin-accent:#173c2c}
+#scoreCard,#scoreCard .match-meta,#scoreCard .result-banner,#scoreCard .match-time-strip,
+#scoreCard .score-panel,#scoreCard .score-footer{
+ background:var(--skin-accent)!important;background-image:none!important;color:#fff!important;
+}
+#scoreCard{border-color:color-mix(in srgb,var(--skin-accent),white 28%)!important}
+#scoreCard .match-meta,#scoreCard .result-banner,#scoreCard .match-time-strip{border-color:#ffffff55!important;box-shadow:none!important}
+#scoreCard .event-pop{
+ background:#c5ff00!important;background-image:none!important;color:#10170e!important;
+ border:1px solid #e5ff91!important;box-shadow:0 0 18px #c5ff0088!important;
+ animation:eventFloatUp 5s ease-in-out forwards!important;
+}
+#scoreCard .event-pop.yellow,#scoreCard .event-pop.red,#scoreCard .event-pop.neutral{
+ background:#c5ff00!important;background-image:none!important;color:#10170e!important;
+}
+#playerEventFlash{display:none!important}
+#sponsorFloat.matchday-floating-slot{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ width:max-content!important;max-width:92%!important;height:auto!important;min-height:0!important;
+ padding:12px!important;gap:9px!important;overflow:hidden!important;box-sizing:border-box!important;
+ background:#f0f4fa!important;border:2px solid #45698e!important;border-radius:14px!important;
+}
+#sponsorFloat.matchday-floating-slot.hidden{display:none!important}
+#sponsorFloat.matchday-floating-slot>a{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;max-width:100%!important;height:auto!important;min-height:0!important;gap:9px!important;
+ color:#142238!important;text-decoration:none!important;
+}
+#sponsorFloat.matchday-floating-slot>img,
+#sponsorFloat.matchday-floating-slot>a>img{
+ display:block!important;width:auto!important;height:auto!important;max-width:100%!important;
+ max-height:260px!important;object-fit:contain!important;flex:none!important;padding:0!important;
+}
+#sponsorFloat.matchday-floating-slot .floating-ad-message{
+ display:block!important;width:100%!important;max-width:100%!important;flex:none!important;
+ text-align:center!important;font-size:clamp(15px,3.8vw,21px)!important;font-weight:900!important;
+ line-height:1.25!important;color:#142238!important;white-space:normal!important;overflow-wrap:anywhere!important;
+}
+@media(max-width:520px){#sponsorFloat.matchday-floating-slot{max-width:92%!important;padding:10px!important}#sponsorFloat.matchday-floating-slot>img,#sponsorFloat.matchday-floating-slot>a>img{max-height:220px!important}}
+
 </style></head><body class="matches-view">
-<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
+<header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="red">Red</option><option value="black">Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
 <nav class="tabs"><button class="tab active" data-tab="teams">MATCHES</button><button class="tab" data-tab="match">SCOREBOARD</button><button class="tab" data-tab="stats">STATS</button><button class="tab" data-tab="events">EVENTS</button><button class="tab" data-tab="commentary">COMMENTARY</button><button class="tab" data-tab="history">HISTORY</button></nav>
 <section class="score" id="scoreCard">
@@ -756,9 +801,9 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
 /* Event-led sponsor system, independent Red/Black themes and player photos */
 (function(){
  const theme=document.querySelector('#themeSelect');
- if(theme&&!theme.querySelector('option[value="red"]'))theme.insertAdjacentHTML('beforeend','<option value="red">Red Broadcast</option><option value="black">Black Broadcast</option>');
+ if(theme){theme.querySelector('option[value="redblack"]')?.remove();if(!theme.querySelector('option[value="red"]'))theme.insertAdjacentHTML('beforeend','<option value="red">Red</option><option value="black">Black</option>')}
  const priorApply=applyAppearance;
- applyAppearance=function(mode){mode=mode==='redblack'?'red':(['whiteblue','red','black','pro'].includes(mode)?mode:'whiteblue');document.body.dataset.skin=mode;document.body.dataset.uiTheme='light';localStorage.setItem('matchday-skin',mode);if(theme)theme.value=mode};
+ applyAppearance=function(mode){mode=['whiteblue','red','black','pro'].includes(mode)?mode:'whiteblue';document.body.dataset.skin=mode;document.body.dataset.uiTheme='light';localStorage.setItem('matchday-skin',mode);if(theme)theme.value=mode};
  applyAppearance(localStorage.getItem('matchday-skin')||'whiteblue');
  const triggers={goal:true,yellow:true,red:true,start:true,halftime:true,fulltime:true,corner:false,shot:false,save:false};
  state.matchMeta.adTriggers=Object.assign({},triggers,state.matchMeta.adTriggers||{});
@@ -773,7 +818,7 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  const oldRenderTeams=renderTeams;
  renderTeams=function(){oldRenderTeams();document.querySelectorAll('[data-remove-player]').forEach(btn=>{const row=btn.closest('.member');if(!row||row.querySelector('[data-player-photo]'))return;const bits=btn.dataset.removePlayer.split(':'),team=state.teamLibrary.find(x=>x.id===bits[0]),idx=+bits[1],player=team&&team.members[idx];if(!team||!player)return;team.playerPhotos=team.playerPhotos||{};const avatar=document.createElement('span');avatar.className='player-photo-avatar';avatar.innerHTML=team.playerPhotos[player]?'<img src="'+team.playerPhotos[player]+'" alt="">':'⚽';row.prepend(avatar);const label=document.createElement('label');label.className='player-photo-upload';label.textContent='PHOTO';const input=document.createElement('input');input.type='file';input.accept='image/*';input.dataset.playerPhoto=team.id+'|'+idx;label.append(input);row.insertBefore(label,btn)})};
  document.addEventListener('change',e=>{const input=e.target.closest('[data-player-photo]');if(!input)return;const [id,idx]=input.dataset.playerPhoto.split('|'),team=state.teamLibrary.find(x=>x.id===id),player=team&&team.members[+idx],file=input.files&&input.files[0];if(!team||!player||!file)return;if(!file.type.startsWith('image/')){alert('Choose an image file.');return}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas'),size=160;canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d'),scale=Math.max(size/img.width,size/img.height),w=img.width*scale,h=img.height*scale;ctx.drawImage(img,(size-w)/2,(size-h)/2,w,h);team.playerPhotos=team.playerPhotos||{};team.playerPhotos[player]=canvas.toDataURL('image/jpeg',.78);syncActiveTeams();render()};img.src=reader.result};reader.readAsDataURL(file)});
- function playerFlash(player,key,teamIndex){if(!player)return;const el=document.querySelector('#playerEventFlash');if(!el)return;const team=state.teams[teamIndex]||{},photo=(team.playerPhotos||{})[player],label={goal:'GOAL!',yellow:'YELLOW CARD',red:'RED CARD',pass:'PASS',target:'SHOT ON TARGET',shot:'SHOT',corner:'CORNER',foul:'FOUL',save:'SAVE',offside:'OFFSIDE'}[key]||'MATCH EVENT';el.innerHTML=(photo?'<img src="'+photo+'" alt="">':'<span class="player-photo-avatar">⚽</span>')+'<span><strong>'+label+'</strong><small>'+esc(player)+' · '+esc(team.name||'')+'</small></span>';el.classList.remove('hidden');void el.offsetWidth;clearTimeout(window.playerFlashTimer);window.playerFlashTimer=setTimeout(()=>el.classList.add('hidden'),2900)}
+ function playerFlash(player,key,teamIndex){return; if(!player)return;const el=document.querySelector('#playerEventFlash');if(!el)return;const team=state.teams[teamIndex]||{},photo=(team.playerPhotos||{})[player],label={goal:'GOAL!',yellow:'YELLOW CARD',red:'RED CARD',pass:'PASS',target:'SHOT ON TARGET',shot:'SHOT',corner:'CORNER',foul:'FOUL',save:'SAVE',offside:'OFFSIDE'}[key]||'MATCH EVENT';el.innerHTML=(photo?'<img src="'+photo+'" alt="">':'<span class="player-photo-avatar">⚽</span>')+'<span><strong>'+label+'</strong><small>'+esc(player)+' · '+esc(team.name||'')+'</small></span>';el.classList.remove('hidden');void el.offsetWidth;clearTimeout(window.playerFlashTimer);window.playerFlashTimer=setTimeout(()=>el.classList.add('hidden'),2900)}
  const oldShow=showEventAnimation;
  showEventAnimation=function(key,player,team){oldShow(key,player,team);const idx=state.teams.findIndex(t=>t.name===team);playerFlash(player,key,idx);showFloatingSponsor(key)};
  document.querySelector('#scoreCard').insertAdjacentHTML('beforeend','<div class="player-event-flash hidden" id="playerEventFlash"></div>');
@@ -947,7 +992,7 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
    el.className='sponsor-float matchday-floating-slot ad-size-'+(ad.size||'medium');
    el.style.pointerEvents=ad.url?'auto':'none';
    void el.offsetWidth;clearTimeout(window.matchdaySponsorFloatTimer);
-   window.matchdaySponsorFloatTimer=setTimeout(()=>el.classList.add('hidden'),7000);
+   window.matchdaySponsorFloatTimer=setTimeout(()=>el.classList.add('hidden'),5000);
  };
  // Existing event callbacks call this function; expose for start/half/full-time remote updates too.
  window.matchdayShowFloatingAd=showFloatingSponsor;
