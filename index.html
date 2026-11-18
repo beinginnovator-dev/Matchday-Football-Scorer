@@ -333,6 +333,13 @@ body[data-skin="red"] .subtab.active{background:#c51f32!important;color:#fff!imp
 #advertisingEditor button{touch-action:manipulation;cursor:pointer;position:relative;z-index:1}
 #advertisingEditor .teamcard{overflow:visible}
 
+
+/* Apply sponsor animation consistently to the logo and company name. */
+.match-meta.anim-glow #sponsorLogoDisplay{filter:drop-shadow(0 0 7px var(--lime));}
+.match-meta.anim-breathe #sponsorLogoDisplay{animation:sponsorBreathe 2.5s ease-in-out infinite;}
+.match-meta.anim-shine #sponsorLogoDisplay{filter:drop-shadow(0 0 7px #fff);animation:sponsorPulse 2.4s ease-in-out infinite;}
+.match-meta.anim-pulse #sponsorLogoDisplay{animation:sponsorPulse 1.5s ease-in-out infinite;}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
