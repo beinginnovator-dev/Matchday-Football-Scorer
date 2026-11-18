@@ -592,6 +592,11 @@ body[data-skin="whiteblue"] #eventPop,body[data-skin="whiteblue"] .event-pop{col
 .team-flag-upload{display:block;width:100%;margin:7px 0;padding:8px;border:1px dashed #8295a9;border-radius:8px;background:#f7f9fc;color:#142238}
 #advertisingEditor .advt-disabled{opacity:.55;cursor:not-allowed}
 
+
+/* Requested match result pulse */
+#resultBanner.show{animation:matchResultBlink 1.05s ease-in-out infinite!important}
+@keyframes matchResultBlink{0%,100%{filter:brightness(1);box-shadow:0 0 10px #c5ff0060}50%{filter:brightness(1.28);box-shadow:0 0 25px #c5ff00c0,0 0 42px #c5ff0060}}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="red">Red</option><option value="black">Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
@@ -678,7 +683,7 @@ function render(){
 function showEventAnimation(key,player,team){const el=document.querySelector('#eventPop');if(!el)return;const icons={goal:'⚽ GOAL!',yellow:'🟨 YELLOW CARD',red:'🟥 RED CARD',corner:'🚩 CORNER',target:'🎯 SHOT ON TARGET',shot:'⚡ SHOT',save:'🧤 BIG SAVE',foul:'✋ FOUL',offside:'🚩 OFFSIDE',pass:'↗ PASS'};el.className='event-pop '+(key==='yellow'?'yellow':key==='red'?'red':['goal'].includes(key)?'':'neutral');el.innerHTML=esc(icons[key]||'MATCH EVENT')+'<small>'+esc(player||'')+(team?' · '+esc(team):'')+'</small>';void el.offsetWidth;el.classList.remove('hidden');clearTimeout(window.matchEventPopTimer);window.matchEventPopTimer=setTimeout(()=>el.classList.add('hidden'),5000)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function record(team,key){
- if(!state.started||state.finished){alert('Start the match before recording events.');return}
+ if(!state.started||!state.running||state.finished){alert(state.started&&!state.running?'Match is paused. Resume the match before recording events.':'Start the match before recording events.');return}
  if(!state.teams[team].members.length){alert('Add squad members in the TEAMS tab before recording player events.');return}
  openEventModal(team,key);
 }
@@ -687,9 +692,10 @@ function openEventModal(team,key){
  const two=key==='pass',qs={goal:'Who scored the goal?',pass:'Who made the pass?',target:'Who took the shot on target?',shot:'Who took the shot?',corner:'Who took the corner?',foul:'Who committed the foul?',yellow:'Who received the yellow card?',red:'Who received the red card?',offside:'Which player was offside?',save:'Which player made the save?'};
  const wrap=document.createElement('div');wrap.className='modal-backdrop';wrap.innerHTML='<div class="modal"><h3>'+esc(qs[key]||'Select player')+'</h3><p class="small">'+esc(state.teams[team].name)+'</p><label>Player</label><select id="eventPlayer">'+opts+'</select>'+(two?'<label>Pass received by</label><select id="eventTarget">'+opts+'</select>':'')+'<div class="modal-actions"><button class="btn" id="eventCancel">CANCEL</button><button class="btn green" id="eventSave">RECORD EVENT</button></div></div>';
  document.body.appendChild(wrap);wrap.querySelector('#eventCancel').onclick=()=>wrap.remove();
- wrap.querySelector('#eventSave').onclick=()=>{const p=members[+wrap.querySelector('#eventPlayer').value],r=two?members[+wrap.querySelector('#eventTarget').value]:'';if(two&&p===r){alert('Choose two different players.');return}wrap.remove();commitEvent(team,key,p,r)};
+ wrap.querySelector('#eventSave').onclick=()=>{if(!state.running||state.finished){wrap.remove();alert('Match is paused or finished. Resume the match before recording events.');return}const p=members[+wrap.querySelector('#eventPlayer').value],r=two?members[+wrap.querySelector('#eventTarget').value]:'';if(two&&p===r){alert('Choose two different players.');return}wrap.remove();commitEvent(team,key,p,r)};
 }
 function commitEvent(team,key,player,receiver){
+ if(!state.running||state.finished){alert('Match is paused or finished. Resume the match before recording events.');return}
  const k=statKeys[key],s=state.stats[team];if(k)s[k]++;if(key==='goal'){s.shots++;s.target++}if(key==='target')s.shots++;
  const lines={goal:player+' finds the net for '+state.teams[team].name+'! A decisive moment in this contest — the scoreboard moves and the crowd comes alive.',pass:player+' threads a measured pass to '+receiver+'. Patient build-up as '+state.teams[team].name+' look to move forward.',target:player+' lets fly! The effort is on target and the goalkeeper has to stay alert.',shot:player+' takes on the shot from open play. The attempt is away, but the defence can breathe again.',corner:player+' stands over the corner. A chance to deliver danger into the penalty area for '+state.teams[team].name+'.',foul:player+' is penalised for the challenge. The referee brings play to a halt and awards the free kick.',yellow:player+' goes into the referee’s book. A yellow card shown after that challenge.',red:player+' is shown a red card. '+state.teams[team].name+' must continue with ten players.',offside:player+' is flagged offside. The assistant raises the flag and the attack is brought back.',save:player+' produces a big save! The goalkeeper reads the attempt and keeps the score unchanged.'};
  state.events.push({team:state.teams[team].name,label:labels[key]||'Pass',key,player,receiver,commentary:lines[key]||labels[key],teamIndex:team,minute:matchMinute(),clock:time(),timestamp:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}),changes:key==='goal'?['goals','shots','target']:key==='target'?['target','shots']:k?[k]:[]});render();showEventAnimation(key,player,state.teams[team].name);announceEvent(key,lines[key]||labels[key]);if(['goal','red','yellow','target','corner'].includes(key))eventCrowdBoost();if(key==='goal')goalCelebration(team);if(key==='red'){state.teams[team].members=state.teams[team].members.filter(m=>m!==player);render();}
@@ -1181,14 +1187,14 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  showFloatingSponsor=function(eventKey){
    priorShow(eventKey);
    if(!viewerMode)return;
-   const nav=$('nav.tabs'),slot=$('#sponsorFloat');
-   if(nav&&slot)nav.insertAdjacentElement('afterend',slot);
+   const timer=$('.match-time-strip'),slot=$('#sponsorFloat');
+   if(timer&&slot)timer.insertAdjacentElement('afterend',slot);
  };
  const priorSetup=setupViewerMode;
  setupViewerMode=function(){
    priorSetup();
-   const nav=$('nav.tabs'),slot=$('#sponsorFloat');
-   if(viewerMode&&nav&&slot)nav.insertAdjacentElement('afterend',slot);
+   const timer=$('.match-time-strip'),slot=$('#sponsorFloat');
+   if(viewerMode&&timer&&slot)timer.insertAdjacentElement('afterend',slot);
  };
  const priorApplyRemote=applyRemoteState;
  applyRemoteState=function(remote){priorApplyRemote(remote);render();renderViewerTeams()};
