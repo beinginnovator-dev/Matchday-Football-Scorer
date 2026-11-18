@@ -1184,17 +1184,19 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  };
  function $$(q){return document.querySelectorAll(q)}
  const priorShow=showFloatingSponsor;
- showFloatingSponsor=function(eventKey){
-   priorShow(eventKey);
-   if(!viewerMode)return;
-   const timer=$('.match-time-strip'),slot=$('#sponsorFloat');
-   if(timer&&slot)timer.insertAdjacentElement('afterend',slot);
+ const placeAdBelowScoreboard=()=>{
+   const score=$('#scoreCard'),slot=$('#sponsorFloat');
+   if(score&&slot&&slot.parentElement!==score.parentElement)score.insertAdjacentElement('afterend',slot);
+   else if(score&&slot&&score.nextElementSibling!==slot)score.insertAdjacentElement('afterend',slot);
  };
+ showFloatingSponsor=function(eventKey){priorShow(eventKey);if(viewerMode)placeAdBelowScoreboard()};
  const priorSetup=setupViewerMode;
- setupViewerMode=function(){
-   priorSetup();
-   const timer=$('.match-time-strip'),slot=$('#sponsorFloat');
-   if(viewerMode&&timer&&slot)timer.insertAdjacentElement('afterend',slot);
+ setupViewerMode=function(){priorSetup();if(viewerMode)placeAdBelowScoreboard()};
+ const startButton=$('#startBtn'),priorStart=startButton&&startButton.onclick;
+ if(startButton&&priorStart)startButton.onclick=function(ev){
+   priorStart.call(this,ev);
+   const scoreboardTab=$('.tab[data-tab="match"]');
+   if(scoreboardTab)scoreboardTab.click();
  };
  const priorApplyRemote=applyRemoteState;
  applyRemoteState=function(remote){priorApplyRemote(remote);render();renderViewerTeams()};
