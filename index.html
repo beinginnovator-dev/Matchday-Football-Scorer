@@ -340,6 +340,40 @@ body[data-skin="red"] .subtab.active{background:#c51f32!important;color:#fff!imp
 .match-meta.anim-shine #sponsorLogoDisplay{filter:drop-shadow(0 0 7px #fff);animation:sponsorPulse 2.4s ease-in-out infinite;}
 .match-meta.anim-pulse #sponsorLogoDisplay{animation:sponsorPulse 1.5s ease-in-out infinite;}
 
+
+/* Matchday visual corrections */
+#matchMetaBanner{background:#172b45!important;border:1px solid #315477!important;box-shadow:none!important;animation:none!important}
+#matchMetaBanner *{animation:none!important;background-image:none!important}
+#matchMetaBanner .meta-copy{display:flex;flex-direction:column;align-items:center;gap:5px}
+#metaFixture{display:block;color:#fff;font-size:16px;font-weight:950;letter-spacing:1px;text-align:center;line-height:1.25}
+#metaPresented{order:2;color:#cbd8e8}
+#matchMetaBanner .sponsor-brand-row{order:3}
+#metaDetails{order:4;color:#d5e1ef;text-align:center}
+#sponsorLogoDisplay{animation:none!important;filter:none!important}
+.match-time-strip{display:flex!important;position:relative;z-index:2;visibility:visible!important;opacity:1!important;background:#142238;color:#dce8f5;border:1px solid #304967;border-radius:10px;padding:9px 12px;margin:9px 0 2px}
+.match-time-strip .clock{color:#c5ff00!important;font-size:22px!important;font-weight:950}
+.match-time-strip .half{color:#dce8f5!important}
+#scoreCard .match-time-strip{width:100%;box-sizing:border-box}
+#sponsorFloat.matchday-floating-slot{position:relative!important;left:auto!important;bottom:auto!important;transform:none!important;width:100%;max-width:100%;margin:10px 0 12px;box-sizing:border-box;min-height:90px;padding:12px;display:flex;align-items:center;justify-content:center;background:#f1f5fb!important;color:#10233b!important;border:2px solid #45698e!important;border-radius:12px;box-shadow:0 5px 16px #14223822;animation:none!important;white-space:normal}
+#sponsorFloat.matchday-floating-slot a{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;color:inherit;text-decoration:none;touch-action:manipulation}
+#sponsorFloat.matchday-floating-slot img{width:110px;height:70px;max-width:28%;object-fit:contain;background:#fff;border-radius:7px}
+#sponsorFloat.matchday-floating-slot .floating-ad-message{font-size:20px;font-weight:900;line-height:1.25;text-align:center;white-space:normal}
+#sponsorFloat.matchday-floating-slot.ad-size-small{min-height:90px;font-size:16px}
+#sponsorFloat.matchday-floating-slot.ad-size-medium{min-height:250px;max-width:300px;margin:12px auto}
+#sponsorFloat.matchday-floating-slot.ad-size-medium img{width:100%;max-width:260px;height:150px}
+#sponsorFloat.matchday-floating-slot.ad-size-large{min-height:250px;width:100%;padding:18px}
+#sponsorFloat.matchday-floating-slot.ad-size-large img{width:42%;height:180px}
+#sponsorFloat.matchday-floating-slot.ad-size-large .floating-ad-message{font-size:26px}
+#homeGoals.goal-score-glow,#awayGoals.goal-score-glow{color:#c5ff00;text-shadow:0 0 7px #c5ff00,0 0 18px #c5ff00,0 0 34px #9dff00;animation:goalScorePulse 1.25s ease-in-out 2}
+@keyframes goalScorePulse{0%,100%{transform:scale(1);filter:brightness(1)}45%{transform:scale(1.22);filter:brightness(1.6)}}
+.viewer-player-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #dbe4ef}
+.viewer-player-avatar{width:46px;height:46px;flex:none;border-radius:50%;overflow:hidden;border:2px solid #7d9bbc;background:#dce9f5;display:grid;place-items:center}
+.viewer-player-avatar img{width:100%;height:100%;object-fit:cover}
+.viewer-player-avatar.fallback img{object-fit:cover}
+.viewer-player-avatar.fallback{animation:avatarFloat 2.8s ease-in-out infinite}
+@keyframes avatarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:520px){#sponsorFloat.matchday-floating-slot.ad-size-medium{max-width:100%;width:100%;min-height:220px}#sponsorFloat.matchday-floating-slot.ad-size-large{min-height:200px}#sponsorFloat.matchday-floating-slot .floating-ad-message{font-size:17px}#sponsorFloat.matchday-floating-slot.ad-size-large .floating-ad-message{font-size:21px}}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
@@ -759,6 +793,70 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
  applyRemoteState=function(remote){const old=lastRemoteState;priorApplyRemote(remote);if(viewerMode&&old){let count=0;try{count=(JSON.parse(old).events||[]).length}catch(e){};(state.events||[]).slice(count).forEach(ev=>{if(['start','halftime','fulltime'].includes(ev.key))showFloatingSponsor(ev.key)})}};
  // Render initial header with the first sponsor; cycle through all sponsors thereafter.
  renderSponsorBanner();
+})();
+
+
+/* Final requested display fixes */
+(function(){
+ const $=q=>document.querySelector(q);
+ const fixture=document.createElement('span');fixture.id='metaFixture';fixture.textContent=(state.matchMeta&&state.matchMeta.matchName)||'MATCH FIXTURE';
+ const banner=$('#matchMetaBanner'),copy=banner&&banner.querySelector('.meta-copy'),presented=$('#metaPresented');
+ if(copy&&presented&&!$('#metaFixture'))copy.insertBefore(fixture,presented);
+ // Keep the clock attached to the broadcast scoreboard so scorer and viewers both see it.
+ const clock=$('.match-time-strip'),score=$('#scoreCard');
+ if(clock&&score&&clock.parentElement!==score)score.appendChild(clock);
+ const oldRender=render;
+ render=function(){
+   oldRender();
+   const meta=state.matchMeta||{};
+   const f=$('#metaFixture');if(f)f.textContent=meta.matchName||'MATCH FIXTURE';
+   const c=$('.match-time-strip');if(c)c.style.display='flex';
+   renderViewerTeams();
+ };
+ const oldViewerTeams=renderViewerTeams;
+ const fallbackSvg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#dceeff"/><stop offset="1" stop-color="#9bb9d7"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="url(#bg)"/><path d="M19 100c2-23 13-34 31-34s29 11 31 34" fill="#1769a8"/><path d="M29 39c0-19 9-29 22-29 15 0 23 11 22 29l-5 14H34z" fill="#26374b"/><ellipse cx="50" cy="43" rx="20" ry="24" fill="#d99b70"/><path d="M30 39c1-20 9-29 22-29 12 0 20 9 20 25-8-2-14-7-18-13-6 9-14 14-24 17" fill="#26374b"/><path d="M42 46h3m10 0h3" stroke="#27313a" stroke-width="2.5" stroke-linecap="round"/><path d="M45 57q5 4 10 0" fill="none" stroke="#9b554c" stroke-width="2" stroke-linecap="round"/></svg>';
+ const fallback='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(fallbackSvg);
+ renderViewerTeams=function(){
+   const el=$('#viewerTeamsContent');if(!el)return;
+   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">'+state.teams.map(t=>{
+     const photos=t.playerPhotos||{};
+     return '<div class="teamcard" style="margin:0;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:27px">'+esc(t.flag)+'</span><strong style="font-size:13px;overflow-wrap:anywhere">'+esc(t.name)+'</strong></div><div class="small" style="margin-bottom:8px">PLAYERS · '+t.members.length+'</div>'+
+     (t.members.length?t.members.map(m=>'<div class="viewer-player-row"><span class="viewer-player-avatar '+(photos[m]?'':'fallback')+'"><img src="'+esc(photos[m]||fallback)+'" alt="Player portrait"></span><strong style="font-size:13px;overflow-wrap:anywhere">'+esc(m)+'</strong></div>').join(''):'<p class="small">Line-up not added yet.</p>')+'</div>';
+   }).join('')+'</div>';
+ };
+ renderViewerTeams();
+ // One clean sponsor banner only: sponsor rotation changes content, not colours or motion.
+ renderSponsorBanner=function(){
+   const meta=state.matchMeta||{},list=meta.sponsors||[];
+   const s=list.length?list[(window.matchdaySponsorIndex||0)%list.length]:{name:meta.sponsorName||'',logo:meta.sponsorLogo||'',sponsorUrl:''};
+   const name=$('#metaSponsor'),logo=$('#sponsorLogoDisplay'),p=$('#metaPresented');
+   if(name)name.textContent=s.name||'SPONSOR NAME';
+   if(p)p.textContent=s.name?'PRESENTED BY':'SPONSOR NOT SET';
+   if(banner)banner.className='match-meta';
+   if(logo){if(s.logo){logo.src=s.logo;logo.style.display='block';logo.onerror=()=>logo.style.display='none'}else{logo.removeAttribute('src');logo.style.display='none'}}
+   const row=$('.sponsor-brand-row');if(row){row.querySelectorAll('.sponsor-name-link').forEach(a=>a.remove());if(s.sponsorUrl){const a=document.createElement('a');a.className='sponsor-name-link';a.href=s.sponsorUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗';row.append(a)}}
+ };
+ cycleSponsors=function(){const n=(state.matchMeta.sponsors||[]).length;if(n>1)window.matchdaySponsorIndex=((window.matchdaySponsorIndex||0)+1)%n;renderSponsorBanner()};
+ // Do not display a second sponsor animation banner during sponsor rotation.
+ const priorShow=showFloatingSponsor;
+ showFloatingSponsor=function(eventKey){if(!eventKey)return;priorShow(eventKey)};
+ // Replace legacy sponsor-only floating banner; event-based ads remain below scoreboard.
+ const priorGoal=goalCelebration;
+ goalCelebration=function(team){
+   priorGoal(team);
+   const id=team===0?'#homeGoals':'#awayGoals',el=$(id);
+   if(el){el.classList.remove('goal-score-glow');void el.offsetWidth;el.classList.add('goal-score-glow');clearTimeout(window.matchdayGoalGlowTimer);window.matchdayGoalGlowTimer=setTimeout(()=>el.classList.remove('goal-score-glow'),2700)}
+ };
+ // Standard ad formats: banner 728x90, medium rectangle 300x250, billboard 970x250.
+ const priorAdvertising=renderAdvertising;
+ renderAdvertising=function(){
+   priorAdvertising();
+   const editor=$('#advertisingEditor');if(!editor)return;
+   editor.querySelectorAll('select[data-float-size],#newFloatSize').forEach(sel=>{
+     const labels={small:'Standard Banner · 728 × 90',medium:'Medium Rectangle · 300 × 250',large:'Billboard · 970 × 250'};
+     [...sel.options].forEach(o=>{if(labels[o.value])o.textContent=labels[o.value]});
+   });
+ };
 })();
 
 </script></body></html>
