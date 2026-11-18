@@ -374,6 +374,51 @@ body[data-skin="red"] .subtab.active{background:#c51f32!important;color:#fff!imp
 @keyframes avatarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @media(max-width:520px){#sponsorFloat.matchday-floating-slot.ad-size-medium{max-width:100%;width:100%;min-height:220px}#sponsorFloat.matchday-floating-slot.ad-size-large{min-height:200px}#sponsorFloat.matchday-floating-slot .floating-ad-message{font-size:17px}#sponsorFloat.matchday-floating-slot.ad-size-large .floating-ad-message{font-size:21px}}
 
+
+/* Targeted fixes: theme-colour scoreboard, compact clock, single event banner, full-area ads */
+body[data-skin="whiteblue"] .score,
+body[data-skin="redblack"] .score,
+body[data-skin="profootball"] .score{
+  background:var(--skin-accent)!important;
+  background-image:none!important;
+  border-color:color-mix(in srgb,var(--skin-accent),#ffffff 24%)!important;
+  color:#fff!important;
+}
+body[data-skin="whiteblue"] .score .match-meta,
+body[data-skin="redblack"] .score .match-meta,
+body[data-skin="profootball"] .score .match-meta{
+  background:color-mix(in srgb,var(--skin-accent),#071629 24%)!important;
+  border-color:color-mix(in srgb,var(--skin-accent),#ffffff 35%)!important;
+}
+body[data-skin="redblack"] .score{background:#c51f32!important;background-image:none!important}
+body[data-skin="redblack"] .score .match-time-strip{background:#a7192b!important;border-color:#f18a98!important}
+#scoreCard .match-time-strip{padding:6px 10px!important;gap:9px!important;margin:6px 0 0!important;font-size:10px!important;min-height:38px!important}
+#scoreCard .match-time-strip .clock{font-size:16px!important;line-height:1!important}
+#scoreCard .match-time-strip .half{font-size:9px!important;letter-spacing:1px!important}
+#scoreCard .result-banner{background:var(--skin-accent,#c51f32)!important;background-image:none!important;color:#fff!important;border:1px solid #ffffff66!important;box-shadow:none!important;animation:none!important}
+#scoreCard .result-banner span{color:#fff!important}
+#scoreCard .event-pop{background:var(--skin-accent,#c51f32)!important;background-image:none!important;color:#fff!important;border:1px solid #ffffff66!important;box-shadow:0 8px 24px #0005!important}
+#scoreCard .event-pop.yellow{background:#d99a00!important;color:#171717!important}
+#scoreCard .event-pop.red{background:#b91c1c!important;color:#fff!important}
+#sponsorFloat.matchday-floating-slot{box-sizing:border-box;display:flex!important;align-items:center;justify-content:center;overflow:hidden;padding:10px!important;margin:16px auto 18px!important;min-height:0!important;max-width:100%!important;background:#f0f4fa!important}
+#sponsorFloat.matchday-floating-slot>a{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important;height:100%!important;color:#142238!important;text-decoration:none!important}
+#sponsorFloat.matchday-floating-slot>img,
+#sponsorFloat.matchday-floating-slot>a>img{display:block!important;width:100%!important;height:auto!important;max-height:420px!important;object-fit:contain!important;object-position:center!important;border-radius:8px!important}
+#sponsorFloat.matchday-floating-slot .floating-ad-message{display:block;width:100%;text-align:center;font-weight:800;color:#142238}
+#sponsorFloat.matchday-floating-slot.ad-size-large{width:100%!important;min-height:250px!important}
+#sponsorFloat.matchday-floating-slot.ad-size-medium{width:70%!important;min-height:210px!important}
+#sponsorFloat.matchday-floating-slot.ad-size-small{width:50%!important;min-height:160px!important}
+#sponsorFloat.matchday-floating-slot.ad-size-large img{max-height:420px!important}
+#sponsorFloat.matchday-floating-slot.ad-size-medium img{max-height:320px!important}
+#sponsorFloat.matchday-floating-slot.ad-size-small img{max-height:230px!important}
+.viewer-player-avatar{width:54px!important;height:54px!important}
+.viewer-player-avatar img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+@media(max-width:520px){
+ #sponsorFloat.matchday-floating-slot.ad-size-large{width:100%!important;min-height:220px!important}
+ #sponsorFloat.matchday-floating-slot.ad-size-medium{width:70%!important;min-height:190px!important}
+ #sponsorFloat.matchday-floating-slot.ad-size-small{width:50%!important;min-height:145px!important}
+}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
@@ -857,6 +902,47 @@ function setupViewerMode(){if(!viewerMode)return;document.body.classList.remove(
      [...sel.options].forEach(o=>{if(labels[o.value])o.textContent=labels[o.value]});
    });
  };
+})();
+
+
+/* Final reliability patch for viewer player portraits and event display */
+(function(){
+ const originalSync=syncActiveTeams;
+ syncActiveTeams=function(){
+   originalSync();
+   (state.teams||[]).forEach((team,i)=>{
+     const lib=(state.teamLibrary||[]).find(t=>t.id===(state.selectedTeamIds||[])[i]);
+     const photos=(lib&&lib.playerPhotos)||team.playerPhotos||{};
+     team.playerPhotos={...photos};
+   });
+ };
+ const originalViewerRender=renderViewerTeams;
+ renderViewerTeams=function(){
+   const el=document.querySelector('#viewerTeamsContent');if(!el)return;
+   const fallbackSrc=(function(){
+     const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="50" fill="#dceeff"/><path d="M15 100c3-25 15-36 35-36s32 11 35 36" fill="#1769a8"/><path d="M28 39c0-20 10-29 23-29 14 0 23 10 22 29l-5 15H33z" fill="#26374b"/><ellipse cx="50" cy="43" rx="20" ry="24" fill="#d99b70"/><path d="M30 39c2-19 11-29 22-29 12 0 20 10 20 25-8-2-14-7-18-13-6 9-14 14-24 17" fill="#26374b"/><path d="M42 46h3m10 0h3" stroke="#27313a" stroke-width="2.5" stroke-linecap="round"/><path d="M45 57q5 4 10 0" fill="none" stroke="#9b554c" stroke-width="2" stroke-linecap="round"/></svg>';
+     return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+   })();
+   const teams=state.teams||[];
+   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">'+teams.map((t,i)=>{
+     const lib=(state.teamLibrary||[]).find(x=>x.id===(state.selectedTeamIds||[])[i]);
+     const photos={...(lib&&lib.playerPhotos||{}),...(t.playerPhotos||{})};
+     const photoFor=name=>{
+       if(photos[name])return photos[name];
+       const key=Object.keys(photos).find(k=>k.trim().toLowerCase()===String(name).trim().toLowerCase());
+       return key?photos[key]:fallbackSrc;
+     };
+     const members=t.members||[];
+     return '<div class="teamcard" style="margin:0;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:27px">'+esc(t.flag||'')+'</span><strong style="font-size:13px;overflow-wrap:anywhere">'+esc(t.name||'')+'</strong></div><div class="small" style="margin-bottom:8px">PLAYERS · '+members.length+'</div>'+
+       (members.length?members.map(m=>'<div class="viewer-player-row"><span class="viewer-player-avatar"><img loading="eager" decoding="async" src="'+esc(photoFor(m))+'" alt="'+esc(m)+'"></span><strong style="font-size:13px;overflow-wrap:anywhere">'+esc(m)+'</strong></div>').join(''):'<p class="small">Line-up not added yet.</p>')+'</div>';
+   }).join('')+'</div>';
+ };
+ const originalApply=applyRemoteState;
+ applyRemoteState=function(remote){originalApply(remote);renderViewerTeams()};
+ // Use the theme's solid accent for all event popups, never a white gradient.
+ const oldShowEvent=showEventAnimation;
+ showEventAnimation=function(key,player,team){oldShowEvent(key,player,team);const pop=document.querySelector('.event-pop');if(pop){pop.style.background='var(--skin-accent,#c51f32)';pop.style.backgroundImage='none';pop.style.color='#fff'}};
+ renderViewerTeams();
 })();
 
 </script></body></html>
