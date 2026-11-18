@@ -317,6 +317,22 @@ body[data-skin="red"] .subtab.active{background:#c51f32!important;color:#fff!imp
 @keyframes playerAvatarBob{50%{transform:translateY(-2px)}}@keyframes playerFlashUp{0%{opacity:0;transform:translate(-50%,25px) scale(.7)}15%,72%{opacity:1;transform:translate(-50%,-35px) scale(1.04)}100%{opacity:0;transform:translate(-50%,-180px) scale(.9)}}
 .sponsor-float{display:none!important}body.viewer-mode .sponsor-float:not(.hidden){display:flex!important}
 .trigger-option{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--skin-line);border-radius:9px;font-size:11px;font-weight:750}.trigger-option input{width:auto;margin:0}
+
+/* Floating advertisements render in a dedicated strip below the scoreboard. */
+.sponsor-float.matchday-floating-slot{position:relative!important;left:auto!important;bottom:auto!important;transform:none!important;z-index:2;width:100%;max-width:100%;min-height:54px;margin:9px 0 5px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:12px;white-space:normal;box-sizing:border-box;animation:matchdayAdIn .35s ease-out both;pointer-events:auto;background:linear-gradient(110deg,#fff,#e7f2ff,#fff);color:#10233c;border:1px solid #70a8e8}
+.sponsor-float.matchday-floating-slot a{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;color:inherit;text-decoration:none;touch-action:manipulation}
+.sponsor-float.matchday-floating-slot img{width:48px;height:42px;max-width:25%;object-fit:contain;background:#fff;border-radius:7px;padding:3px}
+.sponsor-float.matchday-floating-slot .floating-ad-message{white-space:normal;text-align:center;overflow-wrap:anywhere}
+.sponsor-float.matchday-floating-slot.ad-size-small{font-size:12px;min-height:42px;padding:7px 10px}
+.sponsor-float.matchday-floating-slot.ad-size-small img{width:32px;height:30px}
+.sponsor-float.matchday-floating-slot.ad-size-medium{font-size:15px;min-height:58px}
+.sponsor-float.matchday-floating-slot.ad-size-large{font-size:19px;min-height:82px;padding:15px}
+.sponsor-float.matchday-floating-slot.ad-size-large img{width:70px;height:62px}
+@keyframes matchdayAdIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.sponsor-name-link{touch-action:manipulation;text-decoration:none}
+#advertisingEditor button{touch-action:manipulation;cursor:pointer;position:relative;z-index:1}
+#advertisingEditor .teamcard{overflow:visible}
+
 </style></head><body class="matches-view">
 <header><div class="brand">⚽ <b>MATCHDAY</b></div><button class="install" id="installBtn">INSTALL APP</button><div style="display:flex;align-items:center;gap:8px"><button class="settings-btn" id="shareViewerTop" style="display:none" aria-label="Share viewer invite" title="Share viewer invite">↗</button><button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙</button><span class="status" id="matchStatus">NOT STARTED</span></div><div class="settings-panel" id="settingsPanel"><label>APP APPEARANCE</label><select id="themeSelect"><option value="whiteblue">White &amp; Light Blue</option><option value="redblack">Red &amp; Black</option><option value="pro">Pro Football</option></select><p class="small">Choose a complete Matchday football skin.</p><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="ttsToggle" type="checkbox" style="width:auto"> Commentary voice (TTS)</label><label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input id="crowdToggle" type="checkbox" style="width:auto"> Stadium ambience</label><button class="btn" id="shareViewerBtn">SHARE VIEWER LINK</button><p class="small">Stadium ambience: recorded football crowd from Work With Sounds / Torsten Nilsson, CC BY 4.0. <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:var(--lime)">License</a></p></div></header>
 <main>
